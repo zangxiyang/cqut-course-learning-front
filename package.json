@@ -1,0 +1,29 @@
+{
+  "name": "cqut-course-front",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@types/js-cookie": "^3.0.1",
+    "@types/lodash": "^4.14.181",
+    "axios": "^0.26.1",
+    "js-cookie": "^3.0.1",
+    "lodash": "^4.17.21",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.14"
+  },
+  "devDependencies": {
+    "@arco-design/web-vue": "^2.23.0",
+    "@rollup/plugin-alias": "^3.1.9",
+    "@types/node": "^17.0.23",
+    "@vitejs/plugin-vue": "^2.3.0",
+    "sass": "^1.50.0",
+    "typescript": "^4.5.4",
+    "vite": "^2.9.0",
+    "vue-tsc": "^0.29.8"
+  }
+}

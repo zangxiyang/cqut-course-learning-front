@@ -1,0 +1,241 @@
+/**
+ * @作者: Seale
+ * @时间: 2022/4/11
+ * @版本: V1.0
+ * @声明: 复用样式请和作者联系
+*/
+
+
+.maxer-container{
+  margin: 0 auto;
+}
+.w-1140{
+  width: 1140px;
+}
+.w-1280{
+  width: 1280px;
+}
+.flex{
+  display: flex;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: -moz-flex;
+}
+.f-jc-c{
+  @extend .flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+}
+.f-jc-sb{
+  @extend .flex;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+}
+.f-jc-sa{
+  @extend .flex;
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+}
+.f-jc-r{
+  @extend .flex;
+  justify-content: flex-end;
+  -webkit-justify-content: flex-end;
+}
+.f-col{
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -webkit-box-orient: vertical;
+}
+.al-c{
+  align-items: center;
+  -webkit-align-items: center;
+}
+.al-b{
+  align-items: baseline;
+  -webkit-align-items: baseline;
+}
+.f-wrap{
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+}
+
+.ml-5{
+  margin-left: 5px;
+}
+.ml-10{
+  margin-left: 10px;
+}
+.ml-20{
+  margin-left: 20px;
+}
+.ml-30{
+  margin-left: 30px;
+}
+.mr-5{
+  margin-right: 5px;
+}
+.mr-10{
+  margin-right: 10px;
+}
+.mr-20{
+  margin-right: 20px;
+}
+.mr-40{
+  margin-right: 40px;
+}
+.mt-20{
+  margin-top: 20px;
+}
+.mt-15{
+  margin-top: 15px;
+}
+.mt-10{
+  margin-top: 10px;
+}
+.mt-5{
+  margin-top: 5px;
+}
+.mb-5{
+  margin-bottom: 5px;
+}
+.mb-10{
+  margin-bottom: 10px;
+}
+.mb-15{
+  margin-bottom: 15px;
+}
+.mb-20{
+  margin-bottom: 20px;
+}
+.p-10{
+  padding: 10px;
+}
+.p-5{
+  padding: 5px;
+}
+.cur-p{
+  cursor: pointer;
+}
+.w-full{
+  width: 100%;
+}
+.p-relative{
+  position: relative;
+}
+.p-absolute{
+  position: absolute;
+}
+.none-select{
+  cursor: default;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+}
+.cur-d{
+  cursor: default;
+}
+
+/*maxer self scss*/
+.maxer-border-button{
+  @extend .f-jc-c;
+  @extend .al-c;
+  display: inline-flex !important;
+  font-size: 13px;
+  padding: 3px 8px;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  border-radius: 5px;
+  color: #888;
+  border: 2px solid #ccc;
+  background: transparent;
+  transition: all .3s ease-out;
+  -webkit-transition: all .3s ease-out;
+  &:active,&:focus{
+    outline: none;
+  }
+  &:hover{
+    border-color: #505050;
+    color: #111;
+  }
+  &.light{
+    color: #fff;
+    border-color: #fff;
+    border-width: 1px;
+  }
+  &.large{
+    padding: 6px 13px;
+    font-size: 15px;
+  }
+}
+.maxer-main-container{
+  padding: 24px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  min-height: 500px;
+}
+.maxer-title-container {
+  color: #202020;
+  font-weight: 600;
+  height: 40px;
+  font-size: 20px;
+  .title-wrap{
+    @extend .f-jc-c;
+    @extend .al-c;
+    min-height: 40px;
+  }
+}
+
+/* maxer input style */
+.maxer-input{
+  padding: 18px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin: 10px 0;
+  background-color: #ffffff;
+  border-width: 2px;
+  border-color: #ccc;
+  transition: all .3s ease;
+  -webkit-transition: all .3s ease;
+  box-shadow: none;
+  outline: none;
+  border-style: solid;
+  &:hover{
+    border-color: #505050;
+    box-shadow: #cdcdcd 0 0 8px;
+  }
+  &:focus{
+    border-color: #505050;
+    box-shadow: #cdcdcd 0 0 8px;
+    outline: none;
+  }
+  &.small{
+    margin: 6px 0;
+    padding: 6px 9px;
+    font-size: 15px;
+    line-height: 15px;
+  }
+  &.auto{
+    width: 100%;
+  }
+}
+
+.maxer-require{
+  &:after{
+    content: '(必填)';
+    color: #795548;
+    font-size: 15px;
+    margin-left: 5px;
+  }
+}
+.maxer-un-require{
+  &:after{
+    content: '(可选)';
+    color: #795548;
+    font-size: 15px;
+    margin-left: 5px;
+  }
+}

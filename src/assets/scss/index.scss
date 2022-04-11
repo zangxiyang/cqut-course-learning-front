@@ -1,0 +1,48 @@
+/**
+ * @作者: Seale
+ * @时间: 2022/4/11
+ * @版本: V1.0
+ * @声明: 复用样式请和作者联系
+ * @说明: 基本样式
+*/
+
+/* 引入core样式 */
+@import "core";
+/* 引入arco样式 */
+@import "@arco-design/web-vue/dist/arco.min.css";
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+
+a{
+  color: #111;
+  text-decoration: none;
+}
+::selection {
+  color: #fff;
+  background: #c68556;
+}
+::-moz-selection{
+  color: #fff;
+  background: #c68556;
+}
+input:-webkit-autofill{
+  -webkit-text-fill-color: inherit;
+  -webkit-box-shadow: 0 0 0 1000px white inset;
+  &:hover,&:active,&:focus{
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+  }
+}
+
+/* chrome */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+/* 火狐浏览器 */
+input[type="number"]{
+  -moz-appearance: textfield;
+}
