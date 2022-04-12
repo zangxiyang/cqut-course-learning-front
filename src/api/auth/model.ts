@@ -5,9 +5,14 @@
  * @说明:
  * @网站: https://www.imsle.com
  */
-export interface IModelRegisterRequest{
-    userName: string
-    passWord: string
-    phone: string
-    code: string
+export interface IModelLoginResp {
+    id?: number
+    userName?: string
+    nickName?: string
+    role?: string
+    roleName?: string
+    token?: string
 }
+
+
+

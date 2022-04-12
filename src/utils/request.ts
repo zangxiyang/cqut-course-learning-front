@@ -115,7 +115,7 @@ interface Auth {
  * @param auth
  * @param authType
  */
-export function setAuthorization(auth: Auth, authType: string = AuthType.BEARER): void {
+export function setAuthorization(auth: Auth, authType: string = AuthType.BASIC): void {
     switch (authType) {
         case AuthType.BEARER:
             Cookies.set(xsrfHeaderName, "Bearer " + auth.token, {expires: auth.expireAt})

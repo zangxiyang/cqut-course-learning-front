@@ -13,6 +13,8 @@
     "axios": "^0.26.1",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
+    "pinia": "^2.0.13",
+    "pinia-persistedstate-plugin": "^0.1.0",
     "vue": "^3.2.25",
     "vue-router": "^4.0.14"
   },
