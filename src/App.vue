@@ -6,10 +6,10 @@ const cacheList = ref([]);
 const route = useRoute();
 watch(() => route,
     (newVal, oldVal) => {
-    if (!newVal.meta.ignoreCache && cacheList.value.indexOf(newVal.name) === -1){
-      cacheList.value.push(newVal.name);
-      console.log(cacheList.value);
-    }
+      if (!newVal.meta.ignoreCache && cacheList.value.indexOf(newVal.name) === -1) {
+        cacheList.value.push(newVal.name);
+        console.log(cacheList.value);
+      }
     },
     {deep: true})
 </script>
@@ -17,9 +17,7 @@ watch(() => route,
 <template>
   <router-view v-slot="{Component}">
     <keep-alive :include="cacheList">
-      <suspense>
-        <component :is="Component"/>
-      </suspense>
+      <component :is="Component"/>
     </keep-alive>
   </router-view>
 </template>

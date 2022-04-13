@@ -44,8 +44,9 @@
           </a-col>
           <a-col :span="20">
             <div class="center-right-container">
-              <router-view/>
-
+              <suspense>
+                <router-view/>
+              </suspense>
             </div>
           </a-col>
         </a-row>
@@ -70,9 +71,10 @@ const IconFont = Icon.addFromIconFontCn({src: baseConfig.iconfont})
 </script>
 
 <style lang="scss" scoped>
-.center-right-container{
+.center-right-container {
   min-height: 890px;
 }
+
 .user-card {
   overflow: hidden;
   width: 980px;
