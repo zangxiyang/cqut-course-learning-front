@@ -17,7 +17,9 @@ watch(() => route,
 <template>
   <router-view v-slot="{Component}">
     <keep-alive :include="cacheList">
-      <component :is="Component"/>
+      <suspense>
+        <component :is="Component"/>
+      </suspense>
     </keep-alive>
   </router-view>
 </template>

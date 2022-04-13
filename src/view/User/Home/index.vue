@@ -1,5 +1,5 @@
 <template>
-  <user-card-right-layout>
+  <user-card-right-layout class="animate__animated animate__fadeIn">
     <header class="mt-20">
       <div class="header-container flex al-c">
         <a-avatar :size="72">
@@ -24,6 +24,9 @@
                 <icon-user/>
               </template>
               {{ detail.userName === undefined ? '加载中' : detail.userName }}
+            </a-tag>
+            <a-tag class="ml-10">
+              {{ detail.roleName === undefined ? '加载中' : detail.roleName }}
             </a-tag>
           </div>
           <div class="school mt-10 cur-d">
@@ -115,9 +118,8 @@ import UserCenterSection from "@/components/user-center-section/index.vue";
 import DailyItem from "@/components/daily-item/index.vue";
 import SecurityItem from "@/components/security-item/index.vue";
 
-
 const component = defineComponent({
-  name: 'UserHome'
+  name: 'UserHome',
 });
 
 const userStore = useUserStore();
@@ -125,15 +127,13 @@ const detail = ref<Partial<IModelUserDetailResp>>({
   sex: 0,
 
 });
+
 const fetchUserDetail = async () => {
   const {data} = await userDetailRequest(userStore.id)
   detail.value = {...data}
 }
 
-// 被挂载前
-onBeforeMount(() => {
-  fetchUserDetail();
-})
+await fetchUserDetail();
 
 
 </script>
