@@ -1,15 +1,62 @@
 import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router";
 import {baseConfig} from "@/config";
 
-const routes: Array<RouteRecordRaw> = [{
-    name: 'home',
-    path: '/',
-    component: ()=> import('@/view/Home/index.vue'),
-    meta:{
-        title: '首页',
-        ignoreCache: true
+const routes: Array<RouteRecordRaw> = [
+    {
+        name: 'home',
+        path: '/',
+        component: () => import('@/view/Home/index.vue'),
+        meta: {
+            title: '首页',
+            ignoreCache: true
+        }
+    },
+    {
+        name: 'user',
+        path: '/user',
+        redirect: '/user/setting',
+        component: ()=> import('@/view/User/index.vue'),
+        meta: {
+            title: '用户中心',
+            roles: ['admin','student','teacher'],
+            ignoreCache: true
+        },
+        children:[
+            {
+                name: 'user-course',
+                path: '/user/course',
+                component: ()=> import('@/view/User/Course/index.vue'),
+                meta:{
+                    userNavName: 'course'
+                }
+            },
+            {
+                name: 'user-message',
+                path: '/user/message',
+                component: ()=> import('@/view/User/Message/index.vue'),
+                meta:{
+                    userNavName: 'message'
+                }
+            },
+            {
+                name: 'user-home',
+                path: '/user/home',
+                component: ()=> import('@/view/User/Home/index.vue'),
+                meta:{
+                    userNavName: 'home'
+                }
+            },
+            {
+                name: 'user-setting',
+                path: '/user/setting',
+                component: ()=> import('@/view/User/Setting/index.vue'),
+                meta:{
+                    userNavName: 'setting'
+                }
+            }
+        ]
     }
-}]
+]
 
 
 export const router = createRouter({
@@ -22,7 +69,7 @@ export const router = createRouter({
  */
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.title){
+    if (to.meta.title) {
         document.title = `${to.meta.title} - ${baseConfig.title}`
     }
     // 保证每次切换路由页面都在最上方

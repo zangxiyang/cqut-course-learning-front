@@ -8,9 +8,11 @@ import '@/assets/scss/index.scss'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import pinia from "@/store";
 
+
 createApp(App)
     .use(router)
     .use(ArcoVue)
     .use(ArcoVueIcon)
     .use(pinia)
     .mount('#app')
+

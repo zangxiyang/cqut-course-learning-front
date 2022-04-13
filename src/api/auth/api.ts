@@ -9,5 +9,6 @@
 export default {
     API_LOGIN_URL: '/course-auth/auth/login',
     API_REGISTER_URL: '/course-auth/auth/register',
-    API_REGISTER_SEND_CODE_URL: '/course-auth/auth/sendCode/'
+    API_REGISTER_SEND_CODE_URL: '/course-auth/auth/sendCode/',
+    API_USER_DETAIL_URL: '/course-auth/user/userDetail/',
 }

@@ -10,6 +10,7 @@ import {defineStore} from "pinia";
 
 const useUserStore = defineStore('user', {
         state: (): UserState => ({
+            id: undefined,
             userName: undefined,
             phone: undefined,
             roleName: undefined,
@@ -17,6 +18,9 @@ const useUserStore = defineStore('user', {
             sex: undefined,
             nickName: undefined,
             description: undefined,
+            className: undefined,
+            school: undefined,
+
         }),
         getters: {
             userInfo(state: UserState): UserState {

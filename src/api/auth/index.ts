@@ -8,7 +8,7 @@
 import {Methods, request, Response} from "@/utils/request";
 import {ApiUrl} from "@/api/ApiUrl";
 import {IModelLoginForm, IModelRegisterForm} from "@/components/header/model";
-import {IModelLoginResp} from "@/api/auth/model";
+import {IModelLoginResp, IModelUserDetailResp} from "@/api/auth/model";
 
 // 发送手机验证码
 export async function sendSmsCodeRequest(phone: string){
@@ -21,4 +21,9 @@ export async function registerRequest(params: IModelRegisterForm){
 // 登录
 export async function loginRequest(params: IModelLoginForm){
     return request<IModelLoginResp>(`${ApiUrl.API_LOGIN_URL}`,Methods.POST,params);
+}
+
+// 获取用户详情
+export async function userDetailRequest(id: number){
+    return request<IModelUserDetailResp>(`${ApiUrl.API_USER_DETAIL_URL}/${id}`, Methods.GET);
 }

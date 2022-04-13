@@ -60,6 +60,10 @@
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
 }
+.f-row-reverse{
+  flex-direction: row-reverse;
+  -webkit-flex-direction: row-reverse;
+}
 
 .ml-5{
   margin-left: 5px;

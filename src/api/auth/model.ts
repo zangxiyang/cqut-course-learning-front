@@ -14,5 +14,18 @@ export interface IModelLoginResp {
     token?: string
 }
 
+export interface IModelUserDetailResp {
+    id: number
+    userName: string
+    roleName: string
+    phone: string
+    nickName: string
+    sex: number
+    school: string
+    description: string
+    className: string
+    createDate: string
+    lastLoginDate: string
+}
 
 

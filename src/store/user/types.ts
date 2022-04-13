@@ -8,11 +8,14 @@
 export type RoleType = '' | '*' | 'admin' | 'student' | 'teacher'
 
 export interface UserState{
+    id?: number
     userName?: string
     phone?: string
     roleName?: string
     role?: RoleType
-    sex?: string
+    sex?: number
     nickName?: string
+    school?: string
+    className?: string
     description?: string
 }

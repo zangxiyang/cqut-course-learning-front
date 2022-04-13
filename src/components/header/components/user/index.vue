@@ -1,9 +1,117 @@
 <template>
   <div class="right">
     <div class="container flex al-c">
-      <span class="right-item" @click="clickRegisterLoginModal(0)">登录</span>
-      <span style="color: #d9dde1">/</span>
-      <span class="right-item" @click="clickRegisterLoginModal(1)">注册</span>
+      <template v-if="userName === undefined">
+        <span class="right-item" @click="clickRegisterLoginModal(0)">登录</span>
+        <span style="color: #d9dde1">/</span>
+        <span class="right-item" @click="clickRegisterLoginModal(1)">注册</span>
+      </template>
+      <template v-else>
+        <div class="user-container flex al-c f-row-reverse">
+          <a-popover trigger="click">
+            <a-avatar :style="{ backgroundColor: '#3370ff' }" class="ml-10 cur-p">
+              <IconUser/>
+            </a-avatar>
+            <template #content>
+              <div class="user-pop-container">
+                <header class="header flex al-c">
+                  <div class="left-avatar">
+                    <a-avatar :style="{ backgroundColor: '#3370ff' }" :size="72" class="mr-10">
+                      <template #trigger-icon>
+                        <template v-if="sex === 0">
+                          <icon-man/>
+                        </template>
+                        <template v-else>
+                          <icon-woman/>
+                        </template>
+                      </template>
+                      <IconUser/>
+                    </a-avatar>
+                  </div>
+                  <div class="right-info ml-10">
+                    <div class="userName flex al-c">
+                      <a-tooltip :content="nickName">
+                        <h3 class="cur-p">
+                          <a-typography-text ellipsis style="margin-bottom: 0" title="">
+                            {{ nickName }}
+                          </a-typography-text>
+                        </h3>
+                      </a-tooltip>
+                      <a-tooltip content="用户名">
+                        <a-tag size="small" class="ml-5 cur-p">
+                          <template #icon>
+                            <icon-user/>
+                          </template>
+                          {{ userName }}
+                        </a-tag>
+                      </a-tooltip>
+                    </div>
+                    <div class="classInfo">
+                      {{ className == null ? '班级暂未设置': className }}
+                    </div>
+                    <div class="schoolInfo">
+                      {{ school == null ? '学校暂未设置': school }}
+                    </div>
+                  </div>
+                </header>
+                <main class="main-nav mt-20">
+                  <a-row align="center" :gutter="5">
+                    <a-col :span="12">
+                      <a-button long>
+                        <template #icon>
+                          <icon-home/>
+                        </template>
+                        我的课程
+                      </a-button>
+                    </a-col>
+                    <a-col :span="12">
+                      <a-button disabled long>
+                        <template #icon>
+                          <icon-ordered-list/>
+                        </template>
+                        订单中心
+                      </a-button>
+                    </a-col>
+                  </a-row>
+                  <a-row align="center" :gutter="5" class="mt-5">
+                    <a-col :span="12">
+                      <a-button long disabled>
+                        <template #icon>
+                          <icon-edit/>
+                        </template>
+                        在线签到
+                      </a-button>
+                    </a-col>
+                    <a-col :span="12">
+                      <a-button long @click="handleClickToRouter('/user')">
+                        <template #icon>
+                          <icon-settings/>
+                        </template>
+                        个人中心
+                      </a-button>
+                    </a-col>
+                  </a-row>
+                </main>
+                <footer class="mt-10 flex f-row-reverse">
+                  <a-button type="text" style="color: #f20d0d" @click="handleLogout">
+                    <template #icon>
+                      <icon-import/>
+                    </template>
+                    安全退出
+                  </a-button>
+                </footer>
+              </div>
+            </template>
+          </a-popover>
+
+          <span class="right-item mr-10">
+            我的课程
+          </span>
+          <span class="right-item mr-10">
+            <icon-message style="font-size: 18px"/>
+          </span>
+        </div>
+      </template>
     </div>
   </div>
 
@@ -43,7 +151,8 @@
                        label="密码">
             <a-input-password v-model="modalLoginForm.passWord" placeholder="请输入密码" allow-clear/>
           </a-form-item>
-          <a-button type="primary" status="danger" shape="round" long html-type="submit">登录</a-button>
+          <a-button type="primary" status="danger" shape="round" :loading="loginLoading" long html-type="submit">登录
+          </a-button>
         </a-form>
       </template>
       <template v-if="modalClickIndex === 1">
@@ -107,11 +216,13 @@
 <script setup lang="ts">
 import {defineComponent, reactive, ref} from "vue";
 import useUserStore from "@/store/user";
-import {Message} from "@arco-design/web-vue";
-import {loginRequest, registerRequest, sendSmsCodeRequest} from "@/api/auth";
+import {Message, Notification} from "@arco-design/web-vue";
+import {loginRequest, registerRequest, sendSmsCodeRequest, userDetailRequest} from "@/api/auth";
 import {IModelLoginForm, IModelRegisterForm} from "@/components/header/model";
-import {setAuthorization} from "@/utils/request";
+import {removeAuthorization, setAuthorization} from "@/utils/request";
 import {UserState} from "@/store/user/types";
+import {storeToRefs} from "pinia";
+import {useRouter} from "vue-router";
 
 const component = defineComponent({
   name: 'HeaderUser'
@@ -119,6 +230,7 @@ const component = defineComponent({
 
 
 const userStore = useUserStore();
+const {userName, sex, role, roleName, nickName, school, className} = storeToRefs(userStore)
 
 
 /**
@@ -212,8 +324,9 @@ const fetchRegister = async (body: IModelRegisterForm) => {
     const {code, message} = await registerRequest(body);
     if (code === 200) {
       Message.success("注册成功");
-      // TODO 直接进行登录
       visible.value = false // 关闭模态框
+      // 直接进行登录
+      await fetchLogin({userName: body.userName, passWord: body.passWord});
       // 将注册表单清空
       resetRegisterForm();
     } else {
@@ -242,7 +355,19 @@ const fetchLogin = async (body: IModelLoginForm) => {
     if (code === 200) {
       // 设置token
       setAuthorization({token: data.token, expireAt: 7})
-      userStore.setInfo(data as UserState)
+      const response = await userDetailRequest(data.id);
+      if (response.code === 200) {
+        // 获取用户详情成功
+        userStore.setInfo(response.data as UserState)
+        // 关闭模态框
+        visible.value = false;
+        // 提示信息
+        Notification.success({
+          title: "登录成功",
+          content: `${userName.value}欢迎回来！`
+        });
+      }
+
     } else {
       Message.error(message);
     }
@@ -265,11 +390,28 @@ const resetLoginForm = () => {
   for (let i in modalLoginForm) delete modalLoginForm[i]
 }
 
+const handleLogout = () => {
+  userStore.resetInfo();
+  removeAuthorization();
+}
+
+// 跳转路由
+const router = useRouter();
+const handleClickToRouter = (path: string) => {
+  router.push({path});
+}
+
 
 </script>
 
+
 <style lang="scss" scoped>
 @import "../src/assets/scss/core";
+
+.user-pop-container {
+  width: 300px;
+  padding: 20px;
+}
 
 
 .modal-form {

@@ -1,20 +1,17 @@
 <template>
-<default-layout>
-  测试
-</default-layout>
+  <c-header/>
+  <main class="mt-20 mb-20">
+    <slot/>
+  </main>
 </template>
 
 <script setup lang="ts">
 import {defineComponent} from "vue";
 import CHeader from "@/components/header/index.vue";
-import DefaultLayout from "@/layout/DefaultLayout.vue";
-
 
 const component = defineComponent({
-  name: 'Home'
+  name: 'DefaultLayout'
 });
-
-
 </script>
 
 <style scoped>

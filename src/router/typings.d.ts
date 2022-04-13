@@ -8,5 +8,6 @@ declare module 'vue-router' {
     title?: string; // 浏览器显示的名称
     order?: number; // Sort routing menu items. If set key, the higher the value, the more forward it is
     ignoreCache?: boolean; // if set true, the page will not be cached
+    userNavName?: string;  // 用户中心左侧nav的名称
   }
 }

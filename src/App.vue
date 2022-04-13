@@ -28,6 +28,5 @@ watch(() => route,
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  background-color: #42b983;
 }
 </style>

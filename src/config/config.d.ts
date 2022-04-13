@@ -9,6 +9,8 @@
 interface BaseConfig {
     // 网站标题
     title?: string
+    // iconFont
+    iconfont?: string
 }
 
 interface HeaderNavConfig{
