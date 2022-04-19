@@ -77,7 +77,7 @@ const IconFont = Icon.addFromIconFontCn({src: baseConfig.iconfont})
 
 .user-card {
   overflow: hidden;
-  width: 980px;
+  width: 1140px;
   margin: 10px auto 100px;
   border: 1px solid #e1e2e5;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .14);

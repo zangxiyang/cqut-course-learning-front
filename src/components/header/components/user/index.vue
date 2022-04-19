@@ -66,7 +66,7 @@
                 <main class="main-nav mt-20">
                   <a-row align="center" :gutter="5">
                     <a-col :span="12">
-                      <a-button long>
+                      <a-button long @click="$router.push('/user/course')">
                         <template #icon>
                           <icon-home/>
                         </template>
@@ -114,7 +114,7 @@
             </a-popover>
           </span>
 
-          <span class="right-item mr-10">
+          <span class="right-item mr-10" @click="$router.push('/user/course')">
             我的课程
           </span>
           <span class="right-item mr-10">
