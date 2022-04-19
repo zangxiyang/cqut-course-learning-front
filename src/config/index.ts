@@ -8,7 +8,7 @@
 
 export const baseConfig: BaseConfig = {
     title: '重庆理工大学课程学习平台',
-    iconfont: '//at.alicdn.com/t/font_2121686_yzzl14cwrz.js'
+    iconfont: '//at.alicdn.com/t/font_2121686_p0ulajbpl9s.js'
 }
 
 export const headerNavConfig:HeaderNavConfig[] = [
