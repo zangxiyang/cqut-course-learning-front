@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         name: 'user',
         path: '/user',
-        redirect: '/user/setting',
+        redirect: '/user/home',
         component: ()=> import('@/view/User/index.vue'),
         meta: {
             title: '用户中心',

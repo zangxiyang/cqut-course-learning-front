@@ -133,7 +133,7 @@ const fetchUserDetail = async () => {
   detail.value = {...data}
 }
 
-await fetchUserDetail();
+fetchUserDetail();
 
 
 </script>

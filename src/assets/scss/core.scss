@@ -64,6 +64,11 @@
   flex-direction: row-reverse;
   -webkit-flex-direction: row-reverse;
 }
+.text-ellipsis{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 .ml-5{
   margin-left: 5px;

@@ -8,15 +8,20 @@
       </template>
       <template v-else>
         <div class="user-container flex al-c f-row-reverse">
-          <a-popover trigger="click">
-            <a-avatar :style="{ backgroundColor: '#3370ff' }" class="ml-10 cur-p">
-              <IconUser/>
-            </a-avatar>
-            <template #content>
-              <div class="user-pop-container">
-                <header class="header flex al-c">
-                  <div class="left-avatar">
-                    <a-avatar :style="{ backgroundColor: '#3370ff' }" :size="72" class="mr-10">
+          <span class="right-item">
+            <a-popover trigger="click">
+              <a-avatar>
+                <img
+                    alt="avatar"
+                    src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
+                />
+              </a-avatar>
+              <template #content>
+                <div class="user-pop-container">
+                <header class="header">
+                  <a-row :gutter="10" align="center">
+                    <a-col :span="6">
+                      <a-avatar :style="{ backgroundColor: '#3370ff' }" :size="72">
                       <template #trigger-icon>
                         <template v-if="sex === 0">
                           <icon-man/>
@@ -25,34 +30,38 @@
                           <icon-woman/>
                         </template>
                       </template>
-                      <IconUser/>
+                      <img
+                          alt="avatar"
+                          src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
+                      />
                     </a-avatar>
-                  </div>
-                  <div class="right-info ml-10">
-                    <div class="userName flex al-c">
-                      <a-tooltip :content="nickName">
-                        <h3 class="cur-p">
-                          <a-typography-text ellipsis style="margin-bottom: 0" title="">
+                    </a-col>
+                    <a-col :span="18">
+                      <a-row class="userName" :gutter="10" align="center">
+                        <a-col :span="12">
+                          <h3 class="cur-p">
+                          <a-typography-text ellipsis style="margin-bottom: 0">
                             {{ nickName }}
                           </a-typography-text>
-                        </h3>
-                      </a-tooltip>
-                      <a-tooltip content="用户名">
-                        <a-tag size="small" class="ml-5 cur-p">
+                          </h3>
+                        </a-col>
+                        <a-col :span="12">
+                          <a-tag size="small" class="cur-p text-ellipsis w-full">
                           <template #icon>
                             <icon-user/>
                           </template>
-                          {{ userName }}
+                            <span>{{ userName }}</span>
                         </a-tag>
-                      </a-tooltip>
-                    </div>
-                    <div class="classInfo">
-                      {{ className == null ? '班级暂未设置': className }}
-                    </div>
+                        </a-col>
+                      </a-row>
+                      <div class="classInfo">
+                        {{ className == null ? '班级暂未设置' : className }}
+                      </div>
                     <div class="schoolInfo">
-                      {{ school == null ? '学校暂未设置': school }}
+                      {{ school == null ? '学校暂未设置' : school }}
                     </div>
-                  </div>
+                    </a-col>
+                  </a-row>
                 </header>
                 <main class="main-nav mt-20">
                   <a-row align="center" :gutter="5">
@@ -101,8 +110,9 @@
                   </a-button>
                 </footer>
               </div>
-            </template>
-          </a-popover>
+              </template>
+            </a-popover>
+          </span>
 
           <span class="right-item mr-10">
             我的课程
@@ -409,6 +419,7 @@ const handleClickToRouter = (path: string) => {
 @import "../src/assets/scss/core";
 
 .user-pop-container {
+  overflow: hidden;
   width: 300px;
   padding: 20px;
 }
