@@ -19,7 +19,7 @@ for(let i = 0 ; i < 10; i++){
   list.push({
     id: i,
     name: i%2 ===0? `测试课程${i}`: `超长超长超长超长超长超长超长超长超长超长课程${i}`,
-    authorTeacherName: i%2 ===0  ? `刘智`: `罗杨`,
+    authorTeacherName: i%2 ===0  ? `刘智`: `臧锡洋`,
     className: `大数据3班`,
     publishDate: `几天前`,
     thumb: 'https://i2.hdslb.com/bfs/archive/d5be2168ffbe2de1e3eb76fa3f46faaa898a8b63.jpg@672w_378h_1c'
