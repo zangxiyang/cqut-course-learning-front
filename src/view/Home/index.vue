@@ -35,8 +35,3 @@ const component = defineComponent({
 
 </style>
 
-<style>
-body{
-  background-color: #f0f2f5;
-}
-</style>
