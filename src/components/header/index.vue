@@ -67,6 +67,10 @@ const component = defineComponent({
     margin-left: 20px;
     font-size: 18px;
     @extend .flex, .al-c, .cur-p;
+    a{
+      height: 100%;
+      @extend .flex,.al-c;
+    }
   }
 
   .disabled {
