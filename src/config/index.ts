@@ -17,7 +17,8 @@ export const headerNavConfig:HeaderNavConfig[] = [
         path: "/"
     },
     {
-        title: "课程"
+        title: "课程",
+        path: '/course'
     },
     {
         title: "考试"

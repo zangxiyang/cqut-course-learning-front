@@ -5,6 +5,9 @@
       <home-course-item :item="item"/>
     </a-grid-item>
   </a-grid>
+  <div class="list-bottom-go-more">
+    <a-button type="primary" @click="goMoreClick">了解更多</a-button>
+  </div>
 </div>
 </template>
 
@@ -12,6 +15,7 @@
 import {defineComponent} from "vue";
 import {IModelHomeCourse} from "@/view/Home/component/HomeMain/component/model/home-course";
 import HomeCourseItem from "@/view/Home/component/HomeMain/component/home-course-item/index.vue";
+import {Notification} from "@arco-design/web-vue";
 
 const component = defineComponent({
   name: 'HomeCourseList'
@@ -20,10 +24,36 @@ const component = defineComponent({
 defineProps<{
   list: IModelHomeCourse[]
 }>()
+
+
+
+
+const goMoreClick = ()=>{
+  Notification.success("点击了了解更多")
+}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .home-course-list{
   padding-top: 40px;
+}
+.list-bottom-go-more{
+  margin-top: 50px;
+  text-align: center;
+}
+
+::v-deep(.list-bottom-go-more){
+  .arco-btn-primary, .arco-btn-primary[type=button], .arco-btn-primary[type=submit]{
+    background-image: linear-gradient(90deg, #fe4443, #df2c2c 61%);
+    box-shadow: 0 4px 20px 0 rgba(213,22,22,.3);
+    border-radius: 4px;
+    padding: 8px 30px;
+    height: 40px;
+    font-size: 15px;
+
+    &:hover{
+      background-image: linear-gradient(90deg, #eb3e3e, #cc2828 61%);
+    }
+  }
 }
 </style>

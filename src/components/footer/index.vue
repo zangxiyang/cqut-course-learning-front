@@ -22,6 +22,17 @@
           </div>
         </div>
       </div>
+
+      <div class="footer-container">
+        <div class="footer-row">
+          <div class="footer-row-item">
+            <span class="cur-d"><strong>友情链接</strong></span>
+            <a href="https://www.cqut.edu.cn/" target="_blank" class="ml-10">重庆理工大学</a>
+            <a href="https://ehall.cqut.edu.cn/" target="_blank" class="ml-10">重庆理工大学办事大厅</a>
+            <a href="https://ljxq.cqut.edu.cn/" target="_blank" class="ml-10">重庆理工大学两江校区</a>
+          </div>
+        </div>
+      </div>
     </div>
   </footer>
 </template>
@@ -38,6 +49,7 @@ const year = new Date().getFullYear().toString();
 
 <style lang="scss" scoped>
 .cqut-footer {
+  border-top: 1px solid #efefef;
   position: relative;
   padding: 50px 0;
   background-color: #F6F7F8;
@@ -53,6 +65,14 @@ const year = new Date().getFullYear().toString();
 
 .footer-row {
   display: flex;
+}
+
+.footer-container{
+  margin-bottom: 15px;
+
+  &:last-child{
+    margin-bottom: 0;
+  }
 }
 
 .footer-row-item {

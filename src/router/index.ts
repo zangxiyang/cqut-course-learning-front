@@ -55,7 +55,26 @@ const routes: Array<RouteRecordRaw> = [
                 }
             }
         ]
+    },
+    {
+        name: 'Course',
+        path: '/course',
+        component: ()=> import('@/view/Course/index.vue'),
+        meta:{
+            title: "课程",
+            ignoreCache: true
+        }
+    },
+    {
+        name: 'CourseDetail',
+        path: '/course/:id',
+        component: ()=> import('@/view/Course/view/CourseDetail/index.vue'),
+        meta:{
+            ignoreCache: false
+        },
+        props: true
     }
+
 ]
 
 

@@ -107,6 +107,14 @@ const homeCourseList = ref<IModelHomeCourse[]>([
     thumb: 'https://imgcdn.imsle.com/images/2022/04/20/625d283009abda5905400304.png',
     date: '2022-04-20',
     teacher: '臧锡洋'
+  },
+  {
+    name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
+    signCount: 17,
+    tag: ['大数据','Go','云原生','DevOps'],
+    thumb: 'https://imgcdn.imsle.com/images/2022/04/20/625d283009abda5905400304.png',
+    date: '2022-04-20',
+    teacher: '臧锡洋'
   }
 ]);
 

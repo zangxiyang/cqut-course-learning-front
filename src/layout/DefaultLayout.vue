@@ -1,6 +1,6 @@
 <template>
   <c-header/>
-  <main class="mt-20 mb-20">
+  <main class="mt-20">
     <slot/>
   </main>
   <c-footer/>
