@@ -2,7 +2,7 @@
   <div class="course-list">
     <a-grid :cols="col" :row-gap="30" :col-gap="10">
       <a-grid-item v-for="item in list" :key="item.name">
-        <course-list-item :item="item"/>
+        <course-list-item :item="item" @click="$router.push(`/course/${item.id}`)"/>
       </a-grid-item>
     </a-grid>
 

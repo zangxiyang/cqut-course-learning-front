@@ -69,6 +69,7 @@ const navIndex = ref(0);
 
 const homeCourseList = ref<IModelHomeCourse[]>([
   {
+    id: 1,
     name: '多端全栈项目实战，大型商业级代驾业务全流程落地',
     signCount: 121,
     tag: ['大数据','Java','前端','数据库'],
@@ -77,6 +78,7 @@ const homeCourseList = ref<IModelHomeCourse[]>([
     teacher: '刘智'
   },
   {
+    id: 1,
     name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
     signCount: 17,
     tag: ['大数据','Go','云原生','DevOps'],
@@ -85,6 +87,7 @@ const homeCourseList = ref<IModelHomeCourse[]>([
     teacher: '臧锡洋'
   },
   {
+    id: 1,
     name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
     signCount: 17,
     tag: ['大数据','Go','云原生','DevOps'],
@@ -93,6 +96,7 @@ const homeCourseList = ref<IModelHomeCourse[]>([
     teacher: '臧锡洋'
   },
   {
+    id: 1,
     name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
     signCount: 17,
     tag: ['大数据','Go','云原生','DevOps'],
@@ -101,6 +105,7 @@ const homeCourseList = ref<IModelHomeCourse[]>([
     teacher: '臧锡洋'
   },
   {
+    id: 1,
     name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
     signCount: 17,
     tag: ['大数据','Go','云原生','DevOps'],
@@ -109,6 +114,7 @@ const homeCourseList = ref<IModelHomeCourse[]>([
     teacher: '臧锡洋'
   },
   {
+    id: 1,
     name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
     signCount: 17,
     tag: ['大数据','Go','云原生','DevOps'],

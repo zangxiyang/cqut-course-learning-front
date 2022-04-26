@@ -1,5 +1,5 @@
 <template>
-  <div class="course-box">
+  <div class="course-box" @click="$emit('click')">
     <header class="thumb" :style="{backgroundImage: `url(${item.thumb})`}"></header>
     <p class="title text-ellipsis line2">{{ item.name }}</p>
     <div class="tag flex al-c">
@@ -35,7 +35,7 @@ defineProps<{
   item: IModelHomeCourse
 }>()
 
-const IconFont = Icon.addFromIconFontCn({src: baseConfig.iconfont});
+defineEmits(['click']);
 
 </script>
 

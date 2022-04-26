@@ -98,6 +98,7 @@ const onSelectListClick = (item: IModelSelectListItem) => {
 
 const homeCourseList = ref<IModelHomeCourse[]>([
   {
+    id: 100,
     name: '多端全栈项目实战，大型商业级代驾业务全流程落地',
     signCount: 121,
     tag: ['大数据', 'Java', '前端', '数据库'],
@@ -108,6 +109,7 @@ const homeCourseList = ref<IModelHomeCourse[]>([
 ]);
 for (let i = 0; i < 10; i++) {
   homeCourseList.value.push(  {
+    id: i,
     name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
     signCount: 17,
     tag: ['大数据', 'Go', '云原生', 'DevOps'],

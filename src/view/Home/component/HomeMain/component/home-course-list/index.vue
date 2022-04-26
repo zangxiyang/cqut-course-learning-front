@@ -2,7 +2,7 @@
 <div class="home-course-list">
   <a-grid :cols="3" :row-gap="30" :col-gap="20">
     <a-grid-item v-for="item in list" :key="item.name">
-      <home-course-item :item="item"/>
+      <home-course-item :item="item" @click="$router.push(`/course/${item.id}`)"/>
     </a-grid-item>
   </a-grid>
   <div class="list-bottom-go-more">
@@ -15,7 +15,7 @@
 import {defineComponent} from "vue";
 import {IModelHomeCourse} from "@/view/Home/component/HomeMain/component/model/home-course";
 import HomeCourseItem from "@/view/Home/component/HomeMain/component/home-course-item/index.vue";
-import {Notification} from "@arco-design/web-vue";
+import {useRouter} from "vue-router";
 
 const component = defineComponent({
   name: 'HomeCourseList'
@@ -27,9 +27,9 @@ defineProps<{
 
 
 
-
+const router = useRouter();
 const goMoreClick = ()=>{
-  Notification.success("点击了了解更多")
+  router.push('/course');
 }
 </script>
 
