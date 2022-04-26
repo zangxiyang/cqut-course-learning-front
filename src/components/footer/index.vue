@@ -11,7 +11,10 @@
             <a href="https://beian.miit.gov.cn/" target="_blank">渝ICP备05001039号-1</a>
           </div>
           <div class="footer-row-item">
-            <a href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=50011302000163" target="_blank">渝公网安备 50011302000163号</a>
+            <a class="flex al-c" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=50011302000163" target="_blank">
+              <img src="@/assets/img/beian.png" width="18" height="18" alt="beian">
+              <span class="ml-5">渝公网安备 50011302000163号</span>
+            </a>
           </div>
         </div>
         <div class="footer-row">
@@ -28,6 +31,7 @@
           <div class="footer-row-item">
             <span class="cur-d"><strong>友情链接</strong></span>
             <a href="https://www.cqut.edu.cn/" target="_blank" class="ml-10">重庆理工大学</a>
+            <a href="https://ai.cqut.edu.cn/" target="_blank" class="ml-10">重庆理工大学两江人工智能学院</a>
             <a href="https://ehall.cqut.edu.cn/" target="_blank" class="ml-10">重庆理工大学办事大厅</a>
             <a href="https://ljxq.cqut.edu.cn/" target="_blank" class="ml-10">重庆理工大学两江校区</a>
           </div>
