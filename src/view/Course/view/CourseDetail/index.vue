@@ -65,6 +65,48 @@
             </a-col>
           </a-row>
         </card>
+
+        <div class="course-main mt-20">
+          <a-row :gutter="20">
+            <a-col :span="16">
+              <course-detail-item-list :list="detailList"/>
+            </a-col>
+            <a-col :span="8">
+              <card class="teacher-box">
+                <a-row :gutter="10">
+                  <a-col :span="6">
+                    <a-avatar :size="80">
+                      <img src="https://ai.cqut.edu.cn/__local/9/18/A7/9B594BA707E3232A05502D3E0E0_A106B0C5_A612.jpg"
+                           alt="教师头像"/>
+                    </a-avatar>
+                  </a-col>
+                  <a-col :span="18">
+                    <h3 class="teacher-name">刘智老师</h3>
+                    <div class="operate-button">
+                      <a-button type="primary" size="small">他的课程</a-button>
+                    </div>
+                    <div class="teacher-info">
+                      副教授，硕士生导师。在 《Computerized Medical Imaging and Graphics》、《 Image and Vision Computing 》
+                      、《计算机应用研究》、《光学精密工程》、《计算机科学》及《重庆大学学报(自然科学版)》等国内外重要刊物及国际会议累计发表论文30余篇。
+                    </div>
+                  </a-col>
+                </a-row>
+              </card>
+
+              <card class="right-box">
+                <h3>课程须知</h3>
+                <p>学习本课之前，需要大家对Java开发有一定的基础，对基于SprinBoot2框架开发有一定的经验，这样学习本课程会很容易上手。</p>
+                <h3>老师告诉你能学到什么？</h3>
+                <p class="no-line-height">一、了解Swagger是什么，在实际项目中解决了哪些问题。</p>
+                <p class="no-line-height">二、掌握Swagger中提供的注解。</p>
+                <p class="no-line-height">三、如何搭建Swagger。</p>
+                <p class="no-line-height">四、如何将SpringBoot与Swagger进行整合。</p>
+                <p class="no-line-height">五、掌握Swagger的权限管控。</p>
+                <p class="no-line-height">六、掌握Swagger多环境使用方法。</p>
+              </card>
+            </a-col>
+          </a-row>
+        </div>
       </main>
 
     </div>
@@ -78,6 +120,8 @@ import {useRoute} from "vue-router";
 import {Message} from "@arco-design/web-vue";
 import {baseConfig} from "@/config";
 import Card from "@/components/card/index.vue";
+import {IModelCourseDetailItem} from "@/view/Course/view/CourseDetail/component/course-detail-item-list/model";
+import CourseDetailItemList from "@/view/Course/view/CourseDetail/component/course-detail-item-list/index.vue";
 
 const component = defineComponent({
   name: 'CourseDetail'
@@ -95,10 +139,110 @@ setTimeout(() => {
 }, 1000);
 
 
+// 课程章节数据
+
+const detailList: IModelCourseDetailItem[] = [];
+
+detailList.push(
+    {
+      title: '第1章 课程学习指南及导学',
+      desc: '介绍整体课程内容及学习方法的指导',
+      nodes: [
+        {
+          title: '1-1 Swagger导学',
+          type: 'video'
+        },
+        {
+          title: '1-2 Swagger是什么',
+          type: 'file'
+        }
+      ]
+    },
+    {
+      title: '第2章 文本表征知识',
+      desc: '本章主要介绍One Hot/TF-IDF/Word2Vec等常用的文本表征方法，对比其优缺点，完成代码实践。',
+      nodes: [
+        {
+          title: '2-1 文本表征介绍',
+          type: 'video'
+        },
+        {
+          title: '2-2 One Hot',
+          type: 'file'
+        },
+        {
+          title: '2-3 One Hot代码实践',
+          type: 'video'
+        },
+        {
+          title: '2-4 TF-DF',
+          type: 'video'
+        },
+        {
+          title: '2-5 TF-DF实战（上）',
+          type: 'video'
+        },
+        {
+          title: '2-6 TF-DF实战（下）',
+          type: 'video'
+        },
+        {
+          title: '2-7 Word2Vec',
+          type: 'video'
+        },
+        {
+          title: '2-8 Word2Vec实战',
+          type: 'video'
+        },
+      ]
+    },
+);
+
+
 </script>
 
 <style lang="scss" scoped>
 @import "src/assets/scss/core";
+
+.course-main {
+  .teacher-box {
+    .teacher-name {
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .teacher-info {
+      margin-top: 10px;
+      font-size: 12px;
+      line-height: 15px;
+    }
+  }
+
+  .right-box {
+    margin-top: 15px;
+    font-size: 12px;
+    padding: 10px;
+
+    p, h3, h2, h1, h4 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #545c63;
+      line-height: 24px;
+
+      &.no-line-height {
+        line-height: 14px;
+      }
+    }
+
+    h3 {
+      color: #2c2c2c;
+      font-size: 14px;
+      font-weight: 700;
+    }
+  }
+}
 
 .course-header {
   .thumb {
@@ -161,7 +305,8 @@ setTimeout(() => {
       }
     }
   }
-  .course-operate{
+
+  .course-operate {
     padding-top: 10px;
   }
 }
@@ -174,6 +319,17 @@ setTimeout(() => {
     padding: 8px 30px;
     height: 40px;
     font-size: 15px;
+
+    &:hover {
+      background-image: linear-gradient(90deg, #eb3e3e, #cc2828 61%);
+    }
+  }
+}
+
+::v-deep(.teacher-box) {
+  .arco-btn-primary {
+    background-image: linear-gradient(90deg, #fe4443, #df2c2c 61%);
+    border-radius: 4px;
 
     &:hover {
       background-image: linear-gradient(90deg, #eb3e3e, #cc2828 61%);
