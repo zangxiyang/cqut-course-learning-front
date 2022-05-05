@@ -54,19 +54,58 @@
 
     <cqut-modal v-model="visiblePublish">
       <div class="group f-jc-c al-c">
-        <a-button type="primary" shape="round" size="large" status="danger">我要评论</a-button>
-        <a-button type="primary" class="ml-20" shape="round" size="large" status="danger">我要提问</a-button>
+        <a-button type="primary"
+                  @click="onCommentClick" shape="round"
+                  size="large" status="danger">我要评论
+        </a-button>
+        <a-button type="primary" class="ml-20" shape="round"
+                  @click="onAskClick"
+                  size="large" status="danger">我要提问
+        </a-button>
       </div>
     </cqut-modal>
+
+    <cqut-modal v-model="visibleAsk">
+      <!-- 问答 -->
+      <a-form :model="askForm" layout="vertical" style="margin-top: -20px" @submit="onAskFormSubmit">
+        <a-form-item label="提问标题" field="title">
+          <a-input v-model="askForm.title" placeholder="请输入提问的标题"/>
+        </a-form-item>
+        <a-form-item label="提问内容" field="content">
+          <a-textarea v-model="askForm.content"
+                      :auto-size="{minRows: 5, maxRows: 5}"
+                      :max-length="200" allow-clear show-word-limit/>
+        </a-form-item>
+        <a-button type="primary" status="danger" shape="round" html-type="submit">提问</a-button>
+      </a-form>
+    </cqut-modal>
+
+    <cqut-modal v-model="visibleComment">
+      <!-- 评论 -->
+      <a-form :model="commentForm" layout="vertical" style="margin-top: -20px" @submit="onAskFormSubmit">
+        <a-form-item label="评论内容" field="content">
+          <a-textarea v-model="commentForm.content"
+                      :auto-size="{minRows: 5, maxRows: 5}"
+                      :max-length="200" allow-clear show-word-limit/>
+        </a-form-item>
+        <a-button type="primary" status="danger" shape="round" html-type="submit">评论</a-button>
+      </a-form>
+    </cqut-modal>
+
+
   </div>
 </template>
 
 <script setup lang="ts">
-import {defineComponent, PropType, ref} from "vue";
+import {defineComponent, inject, onMounted, PropType, Ref, ref} from "vue";
 import {IModelCourseNav} from "@/view/Course/view/CourseVideo/component/course-video-bottom/model";
 import {Message} from "@arco-design/web-vue";
 import CqutModal from "@/components/cqut-modal/index.vue";
+import {ValidatedError} from "@arco-design/web-vue/es/form/interface";
 
+// 依赖注入变量
+const visibleAsk = inject('visibleAskProvide',ref(false));
+const visibleComment = inject('visibleCommentProvide',ref(false));
 
 const component = defineComponent({
   name: 'CourseVideoBottom'
@@ -111,12 +150,39 @@ const onGoodClick = () => {
 }
 
 
+
+console.log(visibleAsk)
+
+
+
 // 发布模态框
 const visiblePublish = ref(false);
-const onPublishClick = () => {
-
+const onCommentClick = () => {
+  visiblePublish.value = false;
+  visibleComment.value = true
 }
 
+const onAskClick = () => {
+  visiblePublish.value = false;
+  visibleAsk.value = true;
+}
+
+
+// 评论
+
+const commentForm = ref({
+  content: ''
+})
+
+
+// 问答
+const askForm = ref({
+  title: '',
+  content: ''
+});
+const onAskFormSubmit = (record: Record<string, ValidatedError>) => {
+  console.log(record)
+}
 
 </script>
 
@@ -174,10 +240,11 @@ const onPublishClick = () => {
   }
 }
 
-.modal-close{
+.modal-close {
   cursor: pointer;
   transition: .15s ease-in-out;
-  &:hover{
+
+  &:hover {
     color: #f20d0d;
   }
 }

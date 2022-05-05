@@ -7,11 +7,11 @@
             <icon-list />
             <span>章节</span>
           </dd>
-          <dd class="ask">
+          <dd class="ask" @click="visibleAsk = true">
             <icon-question-circle-fill />
             <span>问答</span>
           </dd>
-          <dd class="comments">
+          <dd class="comments" @click="visibleComment = true">
             <icon-message />
             <span>评论</span>
           </dd>
@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, provide, ref} from "vue";
 import CqutVideoPlayer from "@/components/cqut-video-player/index.vue";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
 import {setTitle} from "@/utils/titleUtils";
@@ -55,12 +55,21 @@ const component = defineComponent({
   name: 'CourseVideo'
 });
 
+// 注入变量
+const visibleComment = ref(false);
+const visibleAsk = ref(false);
+provide('visibleCommentProvide',visibleComment);
+provide('visibleAskProvide', visibleAsk);
+
+
+
 
 // 设置标题
 setTitle();
 
 
 </script>
+
 
 <style lang="scss" scoped>
 @import "src/assets/scss/core";

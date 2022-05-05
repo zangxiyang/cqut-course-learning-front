@@ -7,7 +7,9 @@
       </div>
     </template>
     <template #footer>
-      <slot/>
+      <div class="wrapper">
+        <slot/>
+      </div>
     </template>
   </a-modal>
 </template>
@@ -38,5 +40,8 @@ const emits = defineEmits<{
   &:hover{
     color: #f20d0d;
   }
+}
+.wrapper{
+  margin-top: -30px;
 }
 </style>
