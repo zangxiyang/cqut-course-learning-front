@@ -12,43 +12,101 @@
     </div>
     <div class="course-bottom-container">
       <div class="maxer-container w-1280">
-        <header class="operation mt-20 f-jc-sb">
-          <div class="empty"></div>
-          <a-button type="primary" status="danger" shape="round" size="large" @click="visiblePublish = true">我要发布
-          </a-button>
-        </header>
-        <div class="course-bottom-nav-content">
-          <div class="nav-content-panel">
-            <a-comment
-                author="用户名"
-                content="Comment body content.Comment body content.Comment body content."
-                datetime="2022年05月05日">
-              <template #actions>
-              <span class="action" key="heart" @click="onGoodClick">
-                <span v-if="good">
-                <IconHeartFill :style="{ color: '#f53f3f' }"/>
-                </span>
-                <span v-else>
-                  <IconHeart/>
-                </span>
-                  {{ 83 + (good ? 1 : 0) }}
-              </span>
-                <span class="action" key="reply">
-                  <IconMessage/> 回复
-                </span>
-              </template>
-              <template #avatar>
-                <a-avatar>
-                  <img
-                      alt="avatar"
-                      src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
-                  />
-                </a-avatar>
-              </template>
-            </a-comment>
-          </div>
-        </div>
+        <template v-if="navIndex === 0">
+          <header class="operation f-jc-sb mt-20">
+            <div class="empty"></div>
+            <a-button type="primary" status="danger" shape="round" size="large" @click="visiblePublish = true">我要发布
+            </a-button>
+          </header>
+          <div class="course-bottom-nav-content">
+            <card class="mt-20 mb-20">
+              <div class="nav-content-panel">
+                <a-comment
+                    v-for="item in [1,1,2,12,312,3,123,12,3,123]"
+                    author="用户名"
+                    content="Comment body content.Comment body content.Comment body content."
+                    datetime="2022年05月05日">
+                  <template #actions>
+                  <span class="action" key="heart" @click="onGoodClick">
+                    <span v-if="good">
+                    <IconHeartFill :style="{ color: '#f53f3f' }"/>
+                    </span>
+                    <span v-else>
+                      <IconHeart/>
+                    </span>
+                      {{ 83 + (good ? 1 : 0) }}
+                  </span>
+                    <span class="action reply" @click="openReplyModal(0)">
+                    <IconMessage/> 回复
+                  </span>
+                  </template>
+                  <template #avatar>
+                    <a-avatar>
+                      <img
+                          alt="avatar"
+                          src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
+                      />
+                    </a-avatar>
+                  </template>
+                </a-comment>
 
+                <div class="pagination f-jc-c mt-20">
+                  <a-pagination :total="500" show-total/>
+                </div>
+              </div>
+            </card>
+          </div>
+        </template>
+        <template v-if="navIndex === 1">
+          <!-- 问答 -->
+          <header class="operation f-jc-sb mt-20">
+            <div class="empty"></div>
+            <a-button type="primary" status="danger" shape="round" size="large" @click="visiblePublish = true">我要发布
+            </a-button>
+          </header>
+          <div class="course-bottom-nav-content">
+            <card class="mt-20 mb-20">
+              <div class="nav-content-panel">
+                <a-comment
+                    v-for="item in [1,1,2,12,312,3,123,12,3,123]"
+                    author="用户名"
+                    content=""
+                    datetime="2022年05月05日">
+                  <template #content>
+                      <h2>提问标题</h2>
+                      <p>内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</p>
+                  </template>
+                  <template #actions>
+                    <span class="action" key="heart" @click="onGoodClick">
+                      <span v-if="good">
+                        <IconHeartFill :style="{ color: '#f53f3f' }"/>
+                      </span>
+                      <span v-else>
+                        <IconHeart/>
+                      </span>
+                      {{ 83 + (good ? 1 : 0) }}
+                    </span>
+                    <span class="action reply" @click="openReplyModal(1)">
+                      <IconMessage/> 回复
+                    </span>
+                  </template>
+                  <template #avatar>
+                    <a-avatar>
+                      <img
+                          alt="avatar"
+                          src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
+                      />
+                    </a-avatar>
+                  </template>
+                </a-comment>
+
+                <div class="pagination f-jc-c mt-20">
+                  <a-pagination :total="500" show-total/>
+                </div>
+              </div>
+            </card>
+          </div>
+        </template>
       </div>
     </div>
 
@@ -82,13 +140,45 @@
 
     <cqut-modal v-model="visibleComment">
       <!-- 评论 -->
-      <a-form :model="commentForm" layout="vertical" style="margin-top: -20px" @submit="onAskFormSubmit">
+      <a-form :model="commentForm" layout="vertical" @submit="onAskFormSubmit">
         <a-form-item label="评论内容" field="content">
           <a-textarea v-model="commentForm.content"
                       :auto-size="{minRows: 5, maxRows: 5}"
                       :max-length="200" allow-clear show-word-limit/>
         </a-form-item>
         <a-button type="primary" status="danger" shape="round" html-type="submit">评论</a-button>
+      </a-form>
+    </cqut-modal>
+
+    <cqut-modal v-model="visibleReply">
+      <a-comment
+          class="reply-comment"
+          author="用户名"
+          datetime="2022年05月05日">
+        <template #content>
+          <h2 v-if="replyForm.type === 1">
+            提问标题
+          </h2>
+          <p>Comment body content.Comment body content.Comment body content.</p>
+        </template>
+        <template #avatar>
+          <a-avatar>
+            <img
+                alt="avatar"
+                src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
+            />
+          </a-avatar>
+        </template>
+      </a-comment>
+
+      <a-form :model="replyForm" class="mt-20"
+              layout="vertical" @submit="onReplyFromSubmit">
+        <a-form-item label="回复内容" field="content">
+          <a-textarea v-model="replyForm.content"
+                      :auto-size="{minRows: 5, maxRows: 5}"
+                      :max-length="200" allow-clear show-word-limit/>
+        </a-form-item>
+        <a-button type="primary" status="danger" shape="round" html-type="submit">回复</a-button>
       </a-form>
     </cqut-modal>
 
@@ -102,10 +192,12 @@ import {IModelCourseNav} from "@/view/Course/view/CourseVideo/component/course-v
 import {Message} from "@arco-design/web-vue";
 import CqutModal from "@/components/cqut-modal/index.vue";
 import {ValidatedError} from "@arco-design/web-vue/es/form/interface";
+import Card from "@/components/card/index.vue";
 
 // 依赖注入变量
-const visibleAsk = inject('visibleAskProvide',ref(false));
-const visibleComment = inject('visibleCommentProvide',ref(false));
+const visibleAsk = inject('visibleAskProvide', ref(false));
+const visibleComment = inject('visibleCommentProvide', ref(false));
+const visibleReply = ref(false);
 
 const component = defineComponent({
   name: 'CourseVideoBottom'
@@ -126,9 +218,8 @@ const navConfig: IModelCourseNav[] = [
     index: 1
   },
   {
-    name: '笔记',
-    index: 2,
-    disabled: true
+    name: '资料',
+    index: 2
   }
 ]
 const navIndex = ref(0);
@@ -150,9 +241,7 @@ const onGoodClick = () => {
 }
 
 
-
 console.log(visibleAsk)
-
 
 
 // 发布模态框
@@ -182,6 +271,20 @@ const askForm = ref({
 });
 const onAskFormSubmit = (record: Record<string, ValidatedError>) => {
   console.log(record)
+}
+
+
+// 回复
+const replyForm = ref({
+  type: 0 // 0为评论，1为问答
+  , content: ''
+});
+const onReplyFromSubmit = (record: Record<string, ValidatedError>) => {
+
+}
+const openReplyModal = (type: number) => {
+  replyForm.value.type = type;
+  visibleReply.value = true;
 }
 
 </script>
@@ -234,9 +337,19 @@ const onAskFormSubmit = (record: Record<string, ValidatedError>) => {
 
 .course-bottom-nav-content {
   .action {
+    margin-right: 15px;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
+
+    &.reply {
+      transition: .15s ease-in-out;
+      -webkit-transition: .15s ease-in-out;
+
+      &:hover {
+        color: #f20d0d;
+      }
+    }
   }
 }
 
@@ -247,5 +360,17 @@ const onAskFormSubmit = (record: Record<string, ValidatedError>) => {
   &:hover {
     color: #f20d0d;
   }
+}
+
+.nav-content-panel {
+  padding: 10px 50px;
+}
+
+.reply-comment {
+  margin-top: 50px;
+  text-align: start;
+  padding: 10px;
+  border: 1px dashed #eee;
+  border-radius: 4px;
 }
 </style>

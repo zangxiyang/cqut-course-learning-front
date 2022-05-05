@@ -28,7 +28,6 @@ import DefaultLayout from "@/layout/DefaultLayout.vue";
 import {IModelSelectListItem} from "@/view/Course/component/select-list/model";
 import CourseSelectList from "@/view/Course/component/select-list/index.vue";
 import {Notification} from "@arco-design/web-vue";
-import HomeCourseList from "@/view/Home/component/HomeMain/component/home-course-list/index.vue";
 import {IModelHomeCourse} from "@/view/Home/component/HomeMain/component/model/home-course";
 import CourseListNew from "@/components/course-list-new/index.vue";
 

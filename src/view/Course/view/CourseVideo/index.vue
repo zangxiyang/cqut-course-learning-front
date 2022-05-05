@@ -84,7 +84,6 @@ setTitle();
   background-color: #1c1f21;
   width: 60px;
   @extend .flex,.al-c;
-  z-index: 10000;
   dl{
     flex: 1;
     width: 100%;
