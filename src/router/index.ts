@@ -73,6 +73,15 @@ const routes: Array<RouteRecordRaw> = [
             ignoreCache: false
         },
         props: true
+    },
+    {
+        name: 'CourseVideo',
+        path: '/course/v/:id',
+        component: ()=> import('@/view/Course/view/CourseVideo/index.vue'),
+        meta: {
+            ignoreCache: true
+        },
+        props: true
     }
 
 ]

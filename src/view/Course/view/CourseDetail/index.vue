@@ -122,6 +122,7 @@ import {baseConfig} from "@/config";
 import Card from "@/components/card/index.vue";
 import {IModelCourseDetailItem} from "@/view/Course/view/CourseDetail/component/course-detail-item-list/model";
 import CourseDetailItemList from "@/view/Course/view/CourseDetail/component/course-detail-item-list/index.vue";
+import {setTitle} from "@/utils/titleUtils";
 
 const component = defineComponent({
   name: 'CourseDetail'
@@ -135,7 +136,7 @@ const props = defineProps({
 const loading = ref(false);
 
 setTimeout(() => {
-  document.title = `当前课程名 - ${baseConfig.title}`
+  setTitle('当前课程名')
 }, 1000);
 
 
