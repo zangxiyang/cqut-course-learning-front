@@ -34,8 +34,8 @@
                   {{ 83 + (good ? 1 : 0) }}
               </span>
                 <span class="action" key="reply">
-                <IconMessage/> 回复
-              </span>
+                  <IconMessage/> 回复
+                </span>
               </template>
               <template #avatar>
                 <a-avatar>
@@ -51,21 +51,13 @@
 
       </div>
     </div>
-    <a-modal :visible="visiblePublish" simple hide-cancel>
 
-      <template #title>
-        <div class="f-jc-sb w-full">
-          <div class="empty"></div>
-          <icon-close/>
-        </div>
-      </template>
-      <template #footer>
-        <div class="group flex al-c">
-          <a-button type="primary">我要评论</a-button>
-          <a-button type="primary">我要提问</a-button>
-        </div>
-      </template>
-    </a-modal>
+    <cqut-modal v-model="visiblePublish">
+      <div class="group f-jc-c al-c">
+        <a-button type="primary" shape="round" size="large" status="danger">我要评论</a-button>
+        <a-button type="primary" class="ml-20" shape="round" size="large" status="danger">我要提问</a-button>
+      </div>
+    </cqut-modal>
   </div>
 </template>
 
@@ -73,6 +65,7 @@
 import {defineComponent, PropType, ref} from "vue";
 import {IModelCourseNav} from "@/view/Course/view/CourseVideo/component/course-video-bottom/model";
 import {Message} from "@arco-design/web-vue";
+import CqutModal from "@/components/cqut-modal/index.vue";
 
 
 const component = defineComponent({
@@ -178,6 +171,14 @@ const onPublishClick = () => {
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
+  }
+}
+
+.modal-close{
+  cursor: pointer;
+  transition: .15s ease-in-out;
+  &:hover{
+    color: #f20d0d;
   }
 }
 </style>
