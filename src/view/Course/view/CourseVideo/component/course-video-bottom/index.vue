@@ -73,8 +73,8 @@
                     content=""
                     datetime="2022年05月05日">
                   <template #content>
-                      <h2>提问标题</h2>
-                      <p>内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</p>
+                    <h2>提问标题</h2>
+                    <p>内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</p>
                   </template>
                   <template #actions>
                     <span class="action" key="heart" @click="onGoodClick">
@@ -106,6 +106,72 @@
               </div>
             </card>
           </div>
+        </template>
+
+        <template v-if="navIndex === 2">
+          <!-- 资料 -->
+          <card class="mt-20">
+            <div class="doc-nav">
+              <ul class="f-jc-c al-c">
+                <li :class="{'active': item.index === docNavIndex}" @click="onDocNavClick(item.index)"
+                    v-for="item in docNavConfig" :key="item.index">{{ item.title }}</li>
+              </ul>
+            </div>
+
+            <template v-if="docNavIndex === 0">
+              <!-- 课程文件 -->
+              <a-list>
+                <a-list-item>
+                  <a-list-item-meta title="课程文件哦.doc"
+                                    description="第一章节教学资料">
+                    <template #avatar>
+                      <a-avatar shape="square">
+                        <icon-file />
+                      </a-avatar>
+                    </template>
+                  </a-list-item-meta>
+                  <template #actions>
+                    <a-button type="primary" status="danger" size="mini" shape="round">
+                      <template #icon>
+                        <icon-download />
+                      </template>
+                      下载
+                    </a-button>
+                  </template>
+                </a-list-item>
+              </a-list>
+              <div class="pagination f-jc-c mt-20">
+                <a-pagination :total="500" show-total/>
+              </div>
+            </template>
+
+            <template v-if="docNavIndex === 1">
+              <!-- 知识点文件 -->
+              <a-list>
+                <a-list-item>
+                  <a-list-item-meta title="知识点文件.doc"
+                                    description="第一章节教学资料">
+                    <template #avatar>
+                      <a-avatar shape="square">
+                        <icon-file />
+                      </a-avatar>
+                    </template>
+                  </a-list-item-meta>
+                  <template #actions>
+                    <a-button type="primary" status="danger" size="mini" shape="round">
+                      <template #icon>
+                        <icon-download />
+                      </template>
+                      下载
+                    </a-button>
+                  </template>
+                </a-list-item>
+              </a-list>
+              <div class="pagination f-jc-c mt-20">
+                <a-pagination :total="500" show-total/>
+              </div>
+            </template>
+          </card>
         </template>
       </div>
     </div>
@@ -232,6 +298,16 @@ const onNavClick = (index: number, isDisabled: boolean = false): void => {
   navIndex.value = index;
 }
 
+// 资料
+
+const docNavIndex = ref(0);
+const docNavConfig = [{title: '课程资料', index: 0}, {title: '知识点资料', index: 1}];
+const onDocNavClick = (index: number)=>{
+  docNavIndex.value = index;
+}
+
+
+
 
 // 点赞
 
@@ -255,7 +331,6 @@ const onAskClick = () => {
   visiblePublish.value = false;
   visibleAsk.value = true;
 }
-
 
 // 评论
 
@@ -290,6 +365,50 @@ const openReplyModal = (type: number) => {
 </script>
 
 <style lang="scss" scoped>
+.doc-nav{
+  width: 100%;
+  ul{
+    padding: 10px 20px;
+  }
+  li {
+    position: relative;
+    margin-right: 40px;
+    line-height: 40px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 17px;
+    border-radius: 4px;
+    transition: .2s ease-in-out;
+    -webkit-transition: .2s ease-in-out;
+
+    &:not(.active):hover{
+      background-color: rgba(137, 137, 137, .1);
+    }
+
+    &.disabled {
+      color: rgba(0, 0, 0, .38);
+      cursor: not-allowed;
+    }
+
+    &.active {
+      color: #f20d0d;
+
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 20px;
+        height: 3px;
+        background-color: #f20d0d;
+        bottom: 0;
+        left: calc(50% - 10px);
+        border-radius: 3px;
+      }
+    }
+  }
+}
+
 .course-bottom-nav {
   background-color: #fff;
   height: 68px;

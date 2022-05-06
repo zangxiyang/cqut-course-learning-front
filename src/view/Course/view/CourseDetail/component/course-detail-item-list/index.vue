@@ -8,7 +8,19 @@
     <ul class="nodes">
       <li v-for="node in item.nodes" :key="node.title">
         <router-link :to="node.route" v-if="node.route != null" class="flex al-c">
-          测试
+          <template v-if="node.type === 'file'">
+            <!--文件类型-->
+            <icon-drive-file/>
+            <span class="type-text">文件:</span>
+          </template>
+          <template v-else-if="node.type === 'video'">
+            <!-- 视频类型 -->
+            <icon-video-camera/>
+            <span class="type-text">视频:</span>
+          </template>
+          <span class="title">{{ node.title }}</span>
+          <a-button class="study-btn ml-15" type="primary" status="danger" size="mini" shape="round">开始学习</a-button>
+          
         </router-link>
         <template v-else>
           <a href="JavaScript:" class="flex al-c">
@@ -32,9 +44,13 @@
 </template>
 
 <script setup lang="ts">
-import {defineComponent, PropType} from "vue";
+import {defineComponent, defineEmits, PropType} from "vue";
 import Card from "@/components/card/index.vue";
-import {IModelCourseDetailItem} from "@/view/Course/view/CourseDetail/component/course-detail-item-list/model";
+import {
+  IModelCourseDetailItem,
+  IModelCourseDetailItemNode
+} from "@/view/Course/view/CourseDetail/component/course-detail-item-list/model";
+import {useRouter} from "vue-router";
 
 const component = defineComponent({
   name: 'CourseDetailItemList'
@@ -43,6 +59,10 @@ const component = defineComponent({
 defineProps({
   list: Array as PropType<IModelCourseDetailItem[]>
 })
+
+const emits = defineEmits(['click']);
+const router = useRouter();
+
 </script>
 
 <style lang="scss" scoped>

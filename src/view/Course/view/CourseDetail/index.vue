@@ -141,8 +141,6 @@ setTimeout(() => {
   setTitle('当前课程名')
 }, 1000);
 
-// 导航navIndex
-const navIndex = ref(0);
 
 
 // 课程章节数据
@@ -156,11 +154,13 @@ detailList.push(
       nodes: [
         {
           title: '1-1 Swagger导学',
-          type: 'video'
+          type: 'video',
+          route: '/course/v/1'
         },
         {
           title: '1-2 Swagger是什么',
-          type: 'file'
+          type: 'file',
+          route: '/course/v/1'
         }
       ]
     },
@@ -170,35 +170,43 @@ detailList.push(
       nodes: [
         {
           title: '2-1 文本表征介绍',
-          type: 'video'
+          type: 'video',
+          route: '/course/v/1'
         },
         {
           title: '2-2 One Hot',
-          type: 'file'
+          type: 'file',
+          route: '/course/v/1'
         },
         {
           title: '2-3 One Hot代码实践',
-          type: 'video'
+          type: 'video',
+          route: '/course/v/1'
         },
         {
           title: '2-4 TF-DF',
-          type: 'video'
+          type: 'video',
+          route: '/course/v/1'
         },
         {
           title: '2-5 TF-DF实战（上）',
-          type: 'video'
+          type: 'video',
+          route: '/course/v/1'
         },
         {
           title: '2-6 TF-DF实战（下）',
-          type: 'video'
+          type: 'video',
+          route: '/course/v/1'
         },
         {
           title: '2-7 Word2Vec',
-          type: 'video'
+          type: 'video',
+          route: '/course/v/1'
         },
         {
           title: '2-8 Word2Vec实战',
-          type: 'video'
+          type: 'video',
+          route: '/course/v/1'
         },
       ]
     },
