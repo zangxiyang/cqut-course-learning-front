@@ -69,6 +69,7 @@
         <div class="course-main mt-20">
           <a-row :gutter="20">
             <a-col :span="16">
+              <!-- 左侧课程详情页面 -->
               <course-detail-item-list :list="detailList"/>
             </a-col>
             <a-col :span="8">
@@ -123,6 +124,7 @@ import Card from "@/components/card/index.vue";
 import {IModelCourseDetailItem} from "@/view/Course/view/CourseDetail/component/course-detail-item-list/model";
 import CourseDetailItemList from "@/view/Course/view/CourseDetail/component/course-detail-item-list/index.vue";
 import {setTitle} from "@/utils/titleUtils";
+import CqutNav from "@/components/cqut-nav/index.vue";
 
 const component = defineComponent({
   name: 'CourseDetail'
@@ -138,6 +140,9 @@ const loading = ref(false);
 setTimeout(() => {
   setTitle('当前课程名')
 }, 1000);
+
+// 导航navIndex
+const navIndex = ref(0);
 
 
 // 课程章节数据
