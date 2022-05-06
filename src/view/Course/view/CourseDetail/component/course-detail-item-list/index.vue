@@ -20,7 +20,7 @@
           </template>
           <span class="title">{{ node.title }}</span>
           <a-button class="study-btn ml-15" type="primary" status="danger" size="mini" shape="round">开始学习</a-button>
-          
+
         </router-link>
         <template v-else>
           <a href="JavaScript:" class="flex al-c">

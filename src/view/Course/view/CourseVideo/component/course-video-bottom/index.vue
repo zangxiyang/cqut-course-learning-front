@@ -114,26 +114,27 @@
             <div class="doc-nav">
               <ul class="f-jc-c al-c">
                 <li :class="{'active': item.index === docNavIndex}" @click="onDocNavClick(item.index)"
-                    v-for="item in docNavConfig" :key="item.index">{{ item.title }}</li>
+                    v-for="item in docNavConfig" :key="item.index">{{ item.title }}
+                </li>
               </ul>
             </div>
 
             <template v-if="docNavIndex === 0">
               <!-- 课程文件 -->
               <a-list>
-                <a-list-item>
+                <a-list-item v-for="item in [1,1,1,1,1,1,1,1,1]">
                   <a-list-item-meta title="课程文件哦.doc"
                                     description="第一章节教学资料">
                     <template #avatar>
                       <a-avatar shape="square">
-                        <icon-file />
+                        <icon-file/>
                       </a-avatar>
                     </template>
                   </a-list-item-meta>
                   <template #actions>
                     <a-button type="primary" status="danger" size="mini" shape="round">
                       <template #icon>
-                        <icon-download />
+                        <icon-download/>
                       </template>
                       下载
                     </a-button>
@@ -153,14 +154,14 @@
                                     description="第一章节教学资料">
                     <template #avatar>
                       <a-avatar shape="square">
-                        <icon-file />
+                        <icon-file/>
                       </a-avatar>
                     </template>
                   </a-list-item-meta>
                   <template #actions>
                     <a-button type="primary" status="danger" size="mini" shape="round">
                       <template #icon>
-                        <icon-download />
+                        <icon-download/>
                       </template>
                       下载
                     </a-button>
@@ -302,11 +303,9 @@ const onNavClick = (index: number, isDisabled: boolean = false): void => {
 
 const docNavIndex = ref(0);
 const docNavConfig = [{title: '课程资料', index: 0}, {title: '知识点资料', index: 1}];
-const onDocNavClick = (index: number)=>{
+const onDocNavClick = (index: number) => {
   docNavIndex.value = index;
 }
-
-
 
 
 // 点赞
@@ -365,11 +364,13 @@ const openReplyModal = (type: number) => {
 </script>
 
 <style lang="scss" scoped>
-.doc-nav{
+.doc-nav {
   width: 100%;
-  ul{
+
+  ul {
     padding: 10px 20px;
   }
+
   li {
     position: relative;
     margin-right: 40px;
@@ -382,7 +383,7 @@ const openReplyModal = (type: number) => {
     transition: .2s ease-in-out;
     -webkit-transition: .2s ease-in-out;
 
-    &:not(.active):hover{
+    &:not(.active):hover {
       background-color: rgba(137, 137, 137, .1);
     }
 
@@ -491,5 +492,16 @@ const openReplyModal = (type: number) => {
   padding: 10px;
   border: 1px dashed #eee;
   border-radius: 4px;
+}
+
+::v-deep(.course-bottom-container) {
+  .arco-list-item {
+    transition: .2s linear;
+    -webkit-transition: .2s linear;
+    &:hover {
+      //background-color: var(--color-neutral-3);
+      background-color: rgba(137,137,137,.1);
+    }
+  }
 }
 </style>
