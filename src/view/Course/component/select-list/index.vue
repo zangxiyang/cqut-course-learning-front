@@ -2,10 +2,13 @@
   <div class="select-row flex">
     <span class="category">{{ title }}</span>
     <ul class="category-list ml-10">
+      <li class="list-item" @click="onItemClick({label: '全部', value: -1, index: 0})" :class="{'active': modelValue === 0}">
+        全部
+      </li>
       <li class="list-item" v-for="item in list"
           @click="onItemClick(item)"
           :key="item.index" :class="{'active': modelValue === item.index}">
-        {{ item.value }}
+        {{ item.label }}
       </li>
     </ul>
   </div>

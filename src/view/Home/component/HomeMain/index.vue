@@ -75,9 +75,7 @@ const fetchCourseList = async ()=>{
   courseLoading.value = true;
   try {
     const {code,data} = await courseListRequest({page: 1, size: 6});
-    courseList.value = data.list;
-    console.log(code)
-    console.log(data)
+    courseList.value = data.list.filter(item => item.status === 1);
     if (code === 200){
       courseLoading.value = false;
     }

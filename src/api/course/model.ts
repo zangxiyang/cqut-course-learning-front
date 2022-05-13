@@ -19,3 +19,9 @@ export interface IModelCourseResp {
     detailId: number,
     publishDate: string
 }
+
+export interface IModelClassResp {
+    id:number;
+    className: string;
+    description: string;
+}

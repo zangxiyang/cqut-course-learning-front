@@ -10,7 +10,7 @@
             class="mt-20"
             title="班级"
             @click="onSelectListClick"
-            :list="selectClassList" v-model="selectClassIndex"/>
+            :list="classIdOptions" v-model="selectClassIndex"/>
       </div>
     </header>
     <main class="course-list-container">
@@ -23,13 +23,15 @@
 </template>
 
 <script setup lang="ts">
-import {defineComponent, ref} from "vue";
+import {computed, defineComponent, ref} from "vue";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
 import {IModelSelectListItem} from "@/view/Course/component/select-list/model";
 import CourseSelectList from "@/view/Course/component/select-list/index.vue";
 import {Notification} from "@arco-design/web-vue";
 import {IModelHomeCourse} from "@/view/Home/component/HomeMain/component/model/home-course";
 import CourseListNew from "@/components/course-list-new/index.vue";
+import {IModelClassResp} from "@/api/course/model";
+import {classListRequest} from "@/api/course";
 
 const component = defineComponent({
   name: 'Course'
@@ -39,52 +41,60 @@ const selectIndex = ref(0);
 const selectList: IModelSelectListItem[] = [
   {
     value: '全部',
+    label: '全部',
     index: 0
   },
   {
     value: '微服务',
+    label:'微服务',
     index: 1
   },
   {
     value: '前端开发',
+    label: '前端开发',
     index: 2
   },
   {
     value: '后端开发',
+    label: '后端开发',
     index: 3
   },
   {
     value: '大数据开发',
+    label: '大数据开发',
     index: 4
   },
   {
     value: '机器学习',
+    label: '机器学习',
     index: 5
   }
 ];
 const selectClassIndex = ref(0);
-const selectClassList: IModelSelectListItem[] = [
-  {
-    value: '全部',
-    index: 0
-  },
-  {
-    value: '大数据1班',
-    index: 1
-  },
-  {
-    value: '大数据2班',
-    index: 2
-  },
-  {
-    value: '软工1班',
-    index: 3
-  },
-  {
-    value: '软工2班',
-    index: 4
+// 请求班级信息
+const classListData = ref<IModelClassResp[]>([]);
+const classIdOptions = computed<IModelSelectListItem[]>(() => {
+  return classListData.value.map((value, index, array) => {
+    return {
+      label: value.className,
+      value: value.id,
+      index: index + 1
+    };
+  });
+});
+const classLoading = ref<boolean>(false);
+const fetchClassList = async () => {
+  classLoading.value = true;
+  try {
+    const { data } = await classListRequest();
+    classListData.value = data;
+  } catch (err) {
+
+  } finally {
+    classLoading.value = false;
   }
-];
+};
+fetchClassList();
 
 
 // 选择列表被点击

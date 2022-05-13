@@ -7,9 +7,12 @@
 import {Methods, request} from "@/utils/request";
 import {ApiUrl} from "@/api/ApiUrl";
 import {BasePageRes, BaseParams} from "@/api/model";
-import {IModelCourseResp} from "@/api/course/model";
+import {IModelClassResp, IModelCourseResp} from "@/api/course/model";
 
 
 export function courseListRequest(params: BaseParams){
     return request<BasePageRes<IModelCourseResp[]>>(`${ApiUrl.API_COURSE_LIST_URL}`, Methods.GET, params)
+}
+export function classListRequest(){
+    return request<IModelClassResp[]>(`${ApiUrl.API_CLASS_LIST_URL}`, Methods.GET);
 }

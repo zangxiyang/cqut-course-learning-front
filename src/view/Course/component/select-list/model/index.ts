@@ -5,6 +5,7 @@
  */
 
 export interface IModelSelectListItem {
-    value?: string,
+    value?: string | number,
+    label?: string,
     index?: number
 }

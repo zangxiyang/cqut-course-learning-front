@@ -5,5 +5,6 @@
  */
 
 export default {
-    API_COURSE_LIST_URL: '/course-course/course/course'
+    API_COURSE_LIST_URL: '/course-course/course/course',
+    API_CLASS_LIST_URL: '/course-auth/class/admin/classOption'
 }
