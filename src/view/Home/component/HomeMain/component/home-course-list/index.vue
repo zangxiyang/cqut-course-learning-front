@@ -1,10 +1,15 @@
 <template>
 <div class="home-course-list">
-  <a-grid :cols="3" :row-gap="30" :col-gap="20">
+  <a-grid :cols="3" :row-gap="30" :col-gap="20" v-if="!loading">
     <a-grid-item v-for="item in list" :key="item.name">
       <home-course-item :item="item" @click="$router.push(`/course/${item.id}`)"/>
     </a-grid-item>
   </a-grid>
+  <template v-else>
+    <div class="loading-container f-jc-c al-c">
+      <a-spin :size="32"/>
+    </div>
+  </template>
   <div class="list-bottom-go-more">
     <a-button type="primary" @click="goMoreClick">了解更多</a-button>
   </div>
@@ -22,7 +27,8 @@ const component = defineComponent({
 });
 
 defineProps<{
-  list: IModelHomeCourse[]
+  list: IModelHomeCourse[],
+  loading: boolean
 }>()
 
 
@@ -42,6 +48,9 @@ const goMoreClick = ()=>{
   text-align: center;
 }
 
+::v-deep(.arco-spin-icon){
+  color: #f20d0d;
+}
 ::v-deep(.list-bottom-go-more){
   .arco-btn-primary, .arco-btn-primary[type=button], .arco-btn-primary[type=submit]{
     background-image: linear-gradient(90deg, #fe4443, #df2c2c 61%);

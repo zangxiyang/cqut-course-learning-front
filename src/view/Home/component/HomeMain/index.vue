@@ -27,19 +27,21 @@
         <img src="@/assets/img/title-bg3.png" alt="新上好课" class="new-course-logo">
         <home-course-nav :list="list" v-model="navIndex" class="ml-20"/>
       </header>
-      <home-course-list :list="homeCourseList"/>
+      <home-course-list :list="homeCourseList" :loading="courseLoading"/>
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import {defineComponent, ref} from "vue";
+import {computed, defineComponent, Ref, ref} from "vue";
 import Card from "@/components/card/index.vue";
 import ShowItem from "@/view/Home/component/HomeMain/component/show-item/index.vue";
 import HomeCourseNav from "@/view/Home/component/HomeMain/component/home-course-nav/index.vue";
 import {IModelHomeCourseNav} from "@/view/Home/component/HomeMain/component/home-course-nav/model";
 import HomeCourseList from "@/view/Home/component/HomeMain/component/home-course-list/index.vue";
 import {IModelHomeCourse} from "@/view/Home/component/HomeMain/component/model/home-course";
+import {courseListRequest} from "@/api/course";
+import {IModelCourseResp} from "@/api/course/model";
 
 const component = defineComponent({
   name: 'HomeMain'
@@ -66,63 +68,39 @@ const list: IModelHomeCourseNav[] = [
 const navIndex = ref(0);
 
 
-
-const homeCourseList = ref<IModelHomeCourse[]>([
-  {
-    id: 1,
-    name: '多端全栈项目实战，大型商业级代驾业务全流程落地',
-    signCount: 121,
-    tag: ['大数据','Java','前端','数据库'],
-    thumb: 'https://imgcdn.imsle.com/images/2022/04/20/623931dc09c59e7605400304.png',
-    date: '2022-04-20',
-    teacher: '刘智'
-  },
-  {
-    id: 1,
-    name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
-    signCount: 17,
-    tag: ['大数据','Go','云原生','DevOps'],
-    thumb: 'https://imgcdn.imsle.com/images/2022/04/20/625d283009abda5905400304.png',
-    date: '2022-04-20',
-    teacher: '臧锡洋'
-  },
-  {
-    id: 1,
-    name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
-    signCount: 17,
-    tag: ['大数据','Go','云原生','DevOps'],
-    thumb: 'https://imgcdn.imsle.com/images/2022/04/20/625d283009abda5905400304.png',
-    date: '2022-04-20',
-    teacher: '臧锡洋'
-  },
-  {
-    id: 1,
-    name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
-    signCount: 17,
-    tag: ['大数据','Go','云原生','DevOps'],
-    thumb: 'https://imgcdn.imsle.com/images/2022/04/20/625d283009abda5905400304.png',
-    date: '2022-04-20',
-    teacher: '臧锡洋'
-  },
-  {
-    id: 1,
-    name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
-    signCount: 17,
-    tag: ['大数据','Go','云原生','DevOps'],
-    thumb: 'https://imgcdn.imsle.com/images/2022/04/20/625d283009abda5905400304.png',
-    date: '2022-04-20',
-    teacher: '臧锡洋'
-  },
-  {
-    id: 1,
-    name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
-    signCount: 17,
-    tag: ['大数据','Go','云原生','DevOps'],
-    thumb: 'https://imgcdn.imsle.com/images/2022/04/20/625d283009abda5905400304.png',
-    date: '2022-04-20',
-    teacher: '臧锡洋'
+// 首页课程列表
+const courseLoading = ref(true);
+const courseList = ref<IModelCourseResp[]>([])
+const fetchCourseList = async ()=>{
+  courseLoading.value = true;
+  try {
+    const {code,data} = await courseListRequest({page: 1, size: 6});
+    courseList.value = data.list;
+    console.log(code)
+    console.log(data)
+    if (code === 200){
+      courseLoading.value = false;
+    }
   }
-]);
+  catch (e){
+    console.log(e)
+  }
+}
+fetchCourseList();
+
+const homeCourseList:Ref<IModelHomeCourse[]> = computed<IModelHomeCourse[]>(()=>{
+  return courseList.value.map((val)=>{
+    return {
+      id: val.id,
+      name: val.name,
+      signCount: 99,
+      tag: [val.className],
+      thumb: val.thumb,
+      date: val.publishDate,
+      teacher: val.teacherName
+    } as IModelHomeCourse
+  })
+});
 
 </script>
 
