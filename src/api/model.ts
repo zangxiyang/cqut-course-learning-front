@@ -24,3 +24,10 @@ export interface BaseParams{
     page: number;
     size: number;
 }
+
+// 分页组件
+export interface BasePagination{
+    page?: number,
+    size?: number,
+    total?: number
+}

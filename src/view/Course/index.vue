@@ -15,7 +15,9 @@
     </header>
     <main class="course-list-container">
       <div class="maxer-container w-1280">
-        <course-list-new :list="homeCourseList" :loading="courseLoading"/>
+        <course-list-new :list="homeCourseList"
+                         @changePage="changePage"
+                         :loading="courseLoading" :pagination="pagination"/>
       </div>
     </main>
 
@@ -27,11 +29,12 @@ import {computed, defineComponent, Ref, ref} from "vue";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
 import {IModelSelectListItem} from "@/view/Course/component/select-list/model";
 import CourseSelectList from "@/view/Course/component/select-list/index.vue";
-import {Notification} from "@arco-design/web-vue";
+import {Message, Notification} from "@arco-design/web-vue";
 import {IModelHomeCourse} from "@/view/Home/component/HomeMain/component/model/home-course";
 import CourseListNew from "@/components/course-list-new/index.vue";
 import {IModelClassResp, IModelCourseResp} from "@/api/course/model";
 import {classListRequest, courseListRequest} from "@/api/course";
+import {BasePagination} from "@/api/model";
 
 const component = defineComponent({
   name: 'Course'
@@ -39,11 +42,6 @@ const component = defineComponent({
 
 const selectIndex = ref(0);
 const selectList: IModelSelectListItem[] = [
-  {
-    value: '全部',
-    label: '全部',
-    index: 0
-  },
   {
     value: '微服务',
     label:'微服务',
@@ -107,11 +105,21 @@ const onSelectListClick = (item: IModelSelectListItem) => {
 // 首页课程列表
 const courseLoading = ref(true);
 const courseList = ref<IModelCourseResp[]>([])
+const pagination = ref<BasePagination>({
+  page: 1,
+  size: 8,
+  total: 0
+});
 const fetchCourseList = async ()=>{
   courseLoading.value = true;
   try {
-    const {code,data} = await courseListRequest({page: 1, size: 6});
+    const {code,data} = await courseListRequest({page: pagination.value.page, size: pagination.value.size});
     courseList.value = data.list.filter(item => item.status === 1);
+    pagination.value = {
+      page: data.pageNumber,
+      size: data.pageSize,
+      total: data.total
+    }
     if (code === 200){
       courseLoading.value = false;
     }
@@ -134,6 +142,11 @@ const homeCourseList:Ref<IModelHomeCourse[]> = computed<IModelHomeCourse[]>(()=>
     } as IModelHomeCourse
   })
 });
+
+const changePage = (page: number)=>{
+  pagination.value.page = page;
+  fetchCourseList();
+}
 
 </script>
 
