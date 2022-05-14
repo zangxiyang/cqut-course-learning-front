@@ -1,10 +1,15 @@
 <template>
   <div class="course-list">
-    <a-grid :cols="col" :row-gap="30" :col-gap="10">
+    <a-grid :cols="col" :row-gap="30" :col-gap="10" v-if="!loading">
       <a-grid-item v-for="item in list" :key="item.name">
         <course-list-item :item="item" @click="$router.push(`/course/${item.id}`)"/>
       </a-grid-item>
     </a-grid>
+    <template v-else>
+      <div class="loading-container f-jc-c al-c">
+        <a-spin :size="32"/>
+      </div>
+    </template>
 
     <div class="course-list-pagination f-jc-c">
       <a-pagination :total="500"/>
@@ -27,6 +32,10 @@ defineProps({
   col: {
     type: Number as PropType<number>,
     default: 4
+  },
+  loading: {
+    type: Boolean as PropType<boolean>,
+    default: true
   }
 })
 </script>

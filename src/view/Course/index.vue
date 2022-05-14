@@ -15,7 +15,7 @@
     </header>
     <main class="course-list-container">
       <div class="maxer-container w-1280">
-        <course-list-new :list="homeCourseList"/>
+        <course-list-new :list="homeCourseList" :loading="courseLoading"/>
       </div>
     </main>
 
@@ -23,15 +23,15 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineComponent, ref} from "vue";
+import {computed, defineComponent, Ref, ref} from "vue";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
 import {IModelSelectListItem} from "@/view/Course/component/select-list/model";
 import CourseSelectList from "@/view/Course/component/select-list/index.vue";
 import {Notification} from "@arco-design/web-vue";
 import {IModelHomeCourse} from "@/view/Home/component/HomeMain/component/model/home-course";
 import CourseListNew from "@/components/course-list-new/index.vue";
-import {IModelClassResp} from "@/api/course/model";
-import {classListRequest} from "@/api/course";
+import {IModelClassResp, IModelCourseResp} from "@/api/course/model";
+import {classListRequest, courseListRequest} from "@/api/course";
 
 const component = defineComponent({
   name: 'Course'
@@ -104,29 +104,36 @@ const onSelectListClick = (item: IModelSelectListItem) => {
 
 
 // 课程列表
-
-const homeCourseList = ref<IModelHomeCourse[]>([
-  {
-    id: 100,
-    name: '多端全栈项目实战，大型商业级代驾业务全流程落地',
-    signCount: 121,
-    tag: ['大数据', 'Java', '前端', '数据库'],
-    thumb: 'https://imgcdn.imsle.com/images/2022/04/20/623931dc09c59e7605400304.png',
-    date: '2022-04-20',
-    teacher: '刘智'
+// 首页课程列表
+const courseLoading = ref(true);
+const courseList = ref<IModelCourseResp[]>([])
+const fetchCourseList = async ()=>{
+  courseLoading.value = true;
+  try {
+    const {code,data} = await courseListRequest({page: 1, size: 6});
+    courseList.value = data.list.filter(item => item.status === 1);
+    if (code === 200){
+      courseLoading.value = false;
+    }
   }
-]);
-for (let i = 0; i < 10; i++) {
-  homeCourseList.value.push(  {
-    id: i,
-    name: '云原生+边缘计算项目实战-KubeEdge打造边缘管理平台',
-    signCount: 17,
-    tag: ['大数据', 'Go', '云原生', 'DevOps'],
-    thumb: 'https://imgcdn.imsle.com/images/2022/04/20/625d283009abda5905400304.png',
-    date: '2022-04-20',
-    teacher: '臧锡洋'
-  });
+  catch (e){
+    console.log(e)
+  }
 }
+fetchCourseList();
+const homeCourseList:Ref<IModelHomeCourse[]> = computed<IModelHomeCourse[]>(()=>{
+  return courseList.value.map((val)=>{
+    return {
+      id: val.id,
+      name: val.name,
+      signCount: 99,
+      tag: [val.className],
+      thumb: val.thumb,
+      date: val.publishDate,
+      teacher: val.teacherName
+    } as IModelHomeCourse
+  })
+});
 
 </script>
 

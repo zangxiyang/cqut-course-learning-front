@@ -71,23 +71,22 @@ const navIndex = ref(0);
 // 首页课程列表
 const courseLoading = ref(true);
 const courseList = ref<IModelCourseResp[]>([])
-const fetchCourseList = async ()=>{
+const fetchCourseList = async () => {
   courseLoading.value = true;
   try {
-    const {code,data} = await courseListRequest({page: 1, size: 6});
+    const {code, data} = await courseListRequest({page: 1, size: 6});
     courseList.value = data.list.filter(item => item.status === 1);
-    if (code === 200){
+    if (code === 200) {
       courseLoading.value = false;
     }
-  }
-  catch (e){
+  } catch (e) {
     console.log(e)
   }
 }
 fetchCourseList();
 
-const homeCourseList:Ref<IModelHomeCourse[]> = computed<IModelHomeCourse[]>(()=>{
-  return courseList.value.map((val)=>{
+const homeCourseList: Ref<IModelHomeCourse[]> = computed<IModelHomeCourse[]>(() => {
+  return courseList.value.map((val) => {
     return {
       id: val.id,
       name: val.name,

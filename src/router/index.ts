@@ -8,7 +8,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/view/Home/index.vue'),
         meta: {
             title: '首页',
-            ignoreCache: true
+            ignoreCache: false
         }
     },
     {

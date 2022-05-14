@@ -1,26 +1,15 @@
 <script setup lang="ts">
 import {ref, watch} from "vue";
 import {useRoute} from "vue-router";
-
-const cacheList = ref([]);
-const route = useRoute();
-watch(() => route,
-    (newVal, oldVal) => {
-      if (!newVal.meta.ignoreCache && cacheList.value.indexOf(newVal.name) === -1) {
-        cacheList.value.push(newVal.name);
-        console.log(cacheList.value);
-      }
-    },
-    {deep: true})
 </script>
 
 <template>
-  <!--<router-view v-slot="{Component}">
-    <keep-alive :include="cacheList">
-      <component :is="Component"/>
+  <router-view v-slot="{Component}">
+    <keep-alive>
+      <component :is="Component" v-if="!$route.meta.ignoreCache"/>
     </keep-alive>
-  </router-view>-->
-  <router-view/>
+    <component :is="Component" v-if="$route.meta.ignoreCache || $route.meta.ignoreCache === undefined"/>
+  </router-view>
 </template>
 
 <style>
