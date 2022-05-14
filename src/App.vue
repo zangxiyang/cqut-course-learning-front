@@ -6,9 +6,9 @@ import {useRoute} from "vue-router";
 <template>
   <router-view v-slot="{Component}">
     <keep-alive>
-      <component :is="Component" v-if="!$route.meta.ignoreCache"/>
+      <component :is="Component" v-if="!$route.meta.ignoreCache" :key="$route.path"/>
     </keep-alive>
-    <component :is="Component" v-if="$route.meta.ignoreCache || $route.meta.ignoreCache === undefined"/>
+    <component :is="Component" :key="$route.path" v-if="$route.meta.ignoreCache || $route.meta.ignoreCache === undefined"/>
   </router-view>
 </template>
 

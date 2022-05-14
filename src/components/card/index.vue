@@ -32,6 +32,7 @@ const component = defineComponent({
     font-size: 16px;
   }
   .c-card-main{
+    position: relative;
     padding: 20px 15px;
   }
 }

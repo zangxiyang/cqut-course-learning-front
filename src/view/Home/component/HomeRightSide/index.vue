@@ -4,10 +4,8 @@
     <card class="notice">
       <div class="title-container flex al-c">
         <icon-font type="iconjingdongjinrongjinzhu" :size="20"/>
-        <h4 class="title ml-5">
-          <a-typography-text ellipsis style="margin-bottom: 0">
-            重庆理工大学课程学习平台上线啦！重庆理工大学课程学习平台上线啦！
-          </a-typography-text>
+        <h4 class="title ml-5 text-ellipsis">
+          重庆理工大学课程学习平台上线啦！重庆理工大学课程学习平台上线啦！
         </h4>
       </div>
       <div class="main-container">
@@ -71,11 +69,13 @@ const IconFont = Icon.addFromIconFontCn({src: baseConfig.iconfont})
 .notice {
   .title-container {
     padding: 5px 0;
+    overflow: hidden;
   }
 
   .title {
     font-size: 17px;
     font-weight: 500;
+    width: 100%;
   }
 
   .main-container {
