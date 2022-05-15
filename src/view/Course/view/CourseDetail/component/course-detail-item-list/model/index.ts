@@ -15,4 +15,5 @@ export interface IModelCourseDetailItemNode{
     title?: string
     type?: string       // 资源类型 video：视频，file：文件
     route?: string      // 点击跳转的地址
+    videoUrl?: string   // 视频地址
 }

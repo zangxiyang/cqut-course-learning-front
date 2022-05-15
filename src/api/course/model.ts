@@ -25,3 +25,30 @@ export interface IModelClassResp {
     className: string;
     description: string;
 }
+
+export interface IModelCourseDetailResp {
+    id: number,
+    name: string,
+    subName: string,
+    description: string,
+    authorTeacherId: number,
+    teacherName: string,
+    classId: number,
+    className: string,
+    thumb: string,
+    status: number,
+    content: string,
+    publishDate: string,
+    chapters: IModelChapter[],
+}
+interface IModelChapter {
+    chapterName: string,
+    description: string,
+    nodes:IModelNode[]
+}
+
+interface IModelNode{
+    nodeName: string,
+    videoUrl: string
+}
+

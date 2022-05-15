@@ -14,12 +14,15 @@ import Artplayer from 'artplayer';
 const component = defineComponent({
   name: 'CqutVideoPlayer'
 });
+const props = defineProps({
+  url: String
+})
 
 const player = ref<HTMLElement>(null);
 onMounted(()=>{
   new Artplayer({
     container: player.value,
-    url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4'
+    url: props.url
   })
 })
 

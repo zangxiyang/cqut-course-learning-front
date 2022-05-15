@@ -16,3 +16,9 @@ export function courseListRequest(params: BaseParams){
 export function classListRequest(){
     return request<IModelClassResp[]>(`${ApiUrl.API_CLASS_LIST_URL}`, Methods.GET);
 }
+
+// 查询课程详情
+export function courseDetailRequest(id: number){
+    return request<IModelCourseResp>(`${ApiUrl.API_COURSE_DETAIL_URL}/${id}`,Methods.GET);
+}
+

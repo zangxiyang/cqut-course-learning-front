@@ -26,7 +26,7 @@
         </dl>
       </div>
       <div class="course-core-layout">
-        <cqut-video-player/>
+        <cqut-video-player :url="videoUrl"/>
       </div>
       <div class="course-right-layout">
         <div class="panel-show">
@@ -50,6 +50,8 @@ import CqutVideoPlayer from "@/components/cqut-video-player/index.vue";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
 import {setTitle} from "@/utils/titleUtils";
 import CourseVideoBottom from "@/view/Course/view/CourseVideo/component/course-video-bottom/index.vue";
+import {Message} from "@arco-design/web-vue";
+import {useRoute, useRouter} from "vue-router";
 
 const component = defineComponent({
   name: 'CourseVideo'
@@ -65,8 +67,18 @@ provide('visibleAskProvide', visibleAsk);
 
 
 // 设置标题
-setTitle();
+setTitle("学习视频播放页");
 
+// 视频
+const route = useRoute();
+const router = useRouter();
+const videoUrl = ref('');
+if (route.query.videoUrl){
+  videoUrl.value = route.query.videoUrl as string;
+} else{
+  Message.error("视频地址为空，3s后返回");
+  setTimeout(()=> router.back(),3000)
+}
 
 </script>
 

@@ -18,25 +18,24 @@
         </a-breadcrumb>
       </header>
 
-      <main class="pb-20">
+      <main class="pb-20" v-if="!loading">
         <card class="course-header">
           <a-row>
             <a-col :span="9">
               <div class="thumb">
-                <img src="https://imgcdn.imsle.com/images/2022/04/20/623931dc09c59e7605400304.png" alt="Thumb Image">
+                <img :src="courseDetail.thumb" alt="Thumb Image">
               </div>
             </a-col>
             <a-col :span="15">
               <div class="course-info">
-                <h3>该课程的标题</h3>
+                <h3>{{ courseDetail.name }}</h3>
                 <p class="subtitle">
-                  一句话对课程的描述，学习该课程最终达到的目的,学习该课程最终达到的目的,学习该课程最终达到的目的,学习该课程最终达到的目的
-                  一句话对课程的描述，学习该课程最终达到的目的,学习该课程最终达到的目的,学习该课程最终达到的目的,学习该课程最终达到的目的
+                  {{ courseDetail.subName }}
                 </p>
                 <div class="tags">
-                  <a-tag>微服务</a-tag>
-                  <a-tag>大前端</a-tag>
-                  <a-tag>Java开发</a-tag>
+                  <a-tag>{{ courseDetail.className }}</a-tag>
+                  <!--<a-tag>大前端</a-tag>
+                  <a-tag>Java开发</a-tag>-->
                 </div>
                 <div class="course-meta">
                   <span class="knowledge-count">共21个知识点</span>
@@ -52,7 +51,7 @@
                   </span>
                   <span class="date">
                     <icon-clock-circle :size="13"/>
-                    <span class="ml-5">2022年04月25日</span>
+                    <span class="ml-5">{{ courseDetail.publishDate }}</span>
                   </span>
                   <span class="score">
                     <a-rate :default-value="4" readonly/>
@@ -82,7 +81,7 @@
                     </a-avatar>
                   </a-col>
                   <a-col :span="18">
-                    <h3 class="teacher-name">刘智老师</h3>
+                    <h3 class="teacher-name">{{courseDetail.teacherName}}</h3>
                     <div class="operate-button">
                       <a-button type="primary" size="small">他的课程</a-button>
                     </div>
@@ -96,26 +95,24 @@
 
               <card class="right-box">
                 <h3>课程须知</h3>
-                <p>学习本课之前，需要大家对Java开发有一定的基础，对基于SprinBoot2框架开发有一定的经验，这样学习本课程会很容易上手。</p>
+                <p v-html="courseDetail.description"/>
                 <h3>老师告诉你能学到什么？</h3>
-                <p class="no-line-height">一、了解Swagger是什么，在实际项目中解决了哪些问题。</p>
-                <p class="no-line-height">二、掌握Swagger中提供的注解。</p>
-                <p class="no-line-height">三、如何搭建Swagger。</p>
-                <p class="no-line-height">四、如何将SpringBoot与Swagger进行整合。</p>
-                <p class="no-line-height">五、掌握Swagger的权限管控。</p>
-                <p class="no-line-height">六、掌握Swagger多环境使用方法。</p>
+                <p class="no-line-height" v-html="courseDetail.content"/>
               </card>
             </a-col>
           </a-row>
         </div>
       </main>
+      <div class="loading-container f-jc-c al-c mt-20 mb-20" v-else>
+        <a-spin :size="40"/>
+      </div>
 
     </div>
   </default-layout>
 </template>
 
 <script setup lang="ts">
-import {defineComponent, PropType, ref} from "vue";
+import {defineComponent, PropType, reactive, ref} from "vue";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
 import {useRoute} from "vue-router";
 import {Message} from "@arco-design/web-vue";
@@ -125,92 +122,59 @@ import {IModelCourseDetailItem} from "@/view/Course/view/CourseDetail/component/
 import CourseDetailItemList from "@/view/Course/view/CourseDetail/component/course-detail-item-list/index.vue";
 import {setTitle} from "@/utils/titleUtils";
 import CqutNav from "@/components/cqut-nav/index.vue";
+import {courseDetailRequest} from "@/api/course";
+import {IModelCourseDetailResp} from "@/api/course/model";
 
 const component = defineComponent({
   name: 'CourseDetail'
 });
 
 const props = defineProps({
-  id: String
+  id: String as PropType<string>
 })
+const courseId = Number.parseInt(props.id);
+
 
 // 页面数据是否正在加载中状态
-const loading = ref(false);
+const loading = ref(true);
 
 setTimeout(() => {
   setTitle('当前课程名')
 }, 1000);
 
+// 请求课程详情数据
+const courseDetail = ref<Partial<IModelCourseDetailResp>>({})
+const detailList= ref<IModelCourseDetailItem[]>([]); // 课程章节数据
+const fetchCourseDetail = async (id: number = courseId) => {
+  loading.value = true;
+  try {
+    const {data} = await courseDetailRequest(id);
+    courseDetail.value = {...data};
+    detailList.value = courseDetail.value.chapters.map((item)=>{
+      return {
+        title: item.chapterName,
+        desc: item.description,
+        nodes: item.nodes.map((val)=>{
+          return {
+            title: val.nodeName,
+            type: 'video',
+            // TODO 组件接收url参数
+            route: '/course/v/1',
+            videoUrl: val.videoUrl
+          }
+        })
+      }
+    });
+
+    loading.value = false;
+  } catch (e) {
+
+  }
+}
+fetchCourseDetail();
 
 
-// 课程章节数据
 
-const detailList: IModelCourseDetailItem[] = [];
-
-detailList.push(
-    {
-      title: '第1章 课程学习指南及导学',
-      desc: '介绍整体课程内容及学习方法的指导',
-      nodes: [
-        {
-          title: '1-1 Swagger导学',
-          type: 'video',
-          route: '/course/v/1'
-        },
-        {
-          title: '1-2 Swagger是什么',
-          type: 'file',
-          route: '/course/v/1'
-        }
-      ]
-    },
-    {
-      title: '第2章 文本表征知识',
-      desc: '本章主要介绍One Hot/TF-IDF/Word2Vec等常用的文本表征方法，对比其优缺点，完成代码实践。',
-      nodes: [
-        {
-          title: '2-1 文本表征介绍',
-          type: 'video',
-          route: '/course/v/1'
-        },
-        {
-          title: '2-2 One Hot',
-          type: 'file',
-          route: '/course/v/1'
-        },
-        {
-          title: '2-3 One Hot代码实践',
-          type: 'video',
-          route: '/course/v/1'
-        },
-        {
-          title: '2-4 TF-DF',
-          type: 'video',
-          route: '/course/v/1'
-        },
-        {
-          title: '2-5 TF-DF实战（上）',
-          type: 'video',
-          route: '/course/v/1'
-        },
-        {
-          title: '2-6 TF-DF实战（下）',
-          type: 'video',
-          route: '/course/v/1'
-        },
-        {
-          title: '2-7 Word2Vec',
-          type: 'video',
-          route: '/course/v/1'
-        },
-        {
-          title: '2-8 Word2Vec实战',
-          type: 'video',
-          route: '/course/v/1'
-        },
-      ]
-    },
-);
 
 
 </script>
@@ -239,6 +203,7 @@ detailList.push(
 
     p, h3, h2, h1, h4 {
       margin-bottom: 10px;
+      white-space: pre-line;
     }
 
     p {
@@ -246,7 +211,7 @@ detailList.push(
       line-height: 24px;
 
       &.no-line-height {
-        line-height: 14px;
+        line-height: 24px;
       }
     }
 
@@ -349,5 +314,9 @@ detailList.push(
       background-image: linear-gradient(90deg, #eb3e3e, #cc2828 61%);
     }
   }
+}
+
+.loading-container {
+  min-height: 400px;
 }
 </style>
