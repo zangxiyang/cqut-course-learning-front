@@ -114,7 +114,7 @@ const fetchCourseList = async ()=>{
   courseLoading.value = true;
   try {
     const {code,data} = await courseListRequest({page: pagination.value.page, size: pagination.value.size});
-    courseList.value = data.list.filter(item => item.status === 1);
+    courseList.value = data.list;
     pagination.value = {
       page: data.pageNumber,
       size: data.pageSize,
