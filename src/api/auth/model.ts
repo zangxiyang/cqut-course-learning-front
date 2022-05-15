@@ -18,6 +18,7 @@ export interface IModelUserDetailResp {
     id: number
     userName: string
     roleName: string
+    avatar: string
     phone: string
     nickName: string
     sex: number

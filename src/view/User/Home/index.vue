@@ -2,17 +2,49 @@
   <user-card-right-layout class="animate__animated animate__fadeIn">
     <header class="mt-20">
       <div class="header-container flex al-c">
-        <a-avatar :size="72">
-          <template #trigger-icon>
-            <template v-if="detail.sex === 0">
-              <icon-man style="color: #1a66ff"/>
+        <template v-if="loading">
+          <a-avatar :size="72">
+            <template #trigger-icon>
+              <template v-if="detail.sex === 0">
+                <icon-man style="color: #1a66ff"/>
+              </template>
+              <template v-else>
+                <icon-woman style="color: #ff45b9"/>
+              </template>
             </template>
-            <template v-else>
-              <icon-woman style="color: #ff45b9"/>
-            </template>
+            <icon-user/>
+          </a-avatar>
+        </template>
+
+        <a-upload
+            :action="uploadAction"
+            :show-file-list="false"
+            :data="{userId: id}"
+            @success="onUploadSuccess"
+            v-else
+        >
+          <template #upload-button>
+            <a-avatar :size="72">
+              <template #trigger-icon>
+                <template v-if="detail.sex === 0">
+                  <icon-man style="color: #1a66ff"/>
+                </template>
+                <template v-else>
+                  <icon-woman style="color: #ff45b9"/>
+                </template>
+              </template>
+              <template v-if="detail.avatar">
+                <img :src="detail.avatar" alt="avatar">
+              </template>
+              <template v-else>
+                <icon-user/>
+              </template>
+            </a-avatar>
+
           </template>
-          <icon-user/>
-        </a-avatar>
+        </a-upload>
+
+
         <div class="user-info ml-10">
           <div class="userName flex al-c">
               <span class="name">
@@ -117,20 +149,38 @@ import {IModelUserDetailResp} from "@/api/auth/model";
 import UserCenterSection from "@/components/user-center-section/index.vue";
 import DailyItem from "@/components/daily-item/index.vue";
 import SecurityItem from "@/components/security-item/index.vue";
+import {storeToRefs} from "pinia";
+import {FileItem} from "@arco-design/web-vue/es/upload";
+import {Message} from "@arco-design/web-vue";
 
 const component = defineComponent({
   name: 'UserHome',
 });
 
-const userStore = useUserStore();
+const {id} = storeToRefs(useUserStore());
 const detail = ref<Partial<IModelUserDetailResp>>({
   sex: 0,
 
 });
 
+// 头像上传
+const uploadAction = `${import.meta.env.VITE_APP_BASE_URL}/course-auth/user/avatar`;
+const onUploadSuccess = (fileItem: FileItem) => {
+  Message.success("修改头像成功");
+  fetchUserDetail();
+}
+
+const loading = ref(false);
 const fetchUserDetail = async () => {
-  const {data} = await userDetailRequest(userStore.id)
-  detail.value = {...data}
+  loading.value = true;
+  try {
+    const {data} = await userDetailRequest(id.value)
+    detail.value = {...data}
+    loading.value = false;
+  } catch (e) {
+
+  }
+
 }
 
 fetchUserDetail();
@@ -139,13 +189,15 @@ fetchUserDetail();
 </script>
 
 <style lang="scss" scoped>
-.header-container{
+.header-container {
   padding-bottom: 30px;
   border-bottom: 1px solid #e5e9ef;
 }
-.main-container{
+
+.main-container {
   padding: 30px 0;
 }
+
 .userName {
   .name {
     max-width: 200px;

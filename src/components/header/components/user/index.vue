@@ -9,12 +9,14 @@
       <template v-else>
         <div class="user-container flex al-c f-row-reverse">
           <span class="right-item">
-            <a-popover trigger="click" v-model:popup-visible="userBoxVisible">
+            <a-popover trigger="hover" v-model:popup-visible="userBoxVisible">
               <a-avatar>
                 <img
+                    v-if="avatar"
                     alt="avatar"
-                    src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
+                    :src="avatar"
                 />
+                <icon-user v-else/>
               </a-avatar>
               <template #content>
                 <div class="user-pop-container">
@@ -30,10 +32,13 @@
                           <icon-woman/>
                         </template>
                       </template>
-                      <img
-                          alt="avatar"
-                          src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
-                      />
+                        <template v-if="avatar">
+                          <img alt="avatar"
+                               :src="avatar"/>
+                        </template>
+                        <template v-else>
+                          <icon-user/>
+                        </template>
                     </a-avatar>
                     </a-col>
                     <a-col :span="18">
@@ -239,15 +244,14 @@ const component = defineComponent({
 });
 
 
-
 const userStore = useUserStore();
 const router = useRouter();
-const {userName, sex, role, roleName, nickName, school, className} = storeToRefs(userStore)
+const {userName, sex, role, roleName, avatar, nickName, school, className} = storeToRefs(userStore)
 
 
 // 登录后用户box逻辑
 const userBoxVisible = ref(false);
-const onUserBoxCourseClick = ()=>{
+const onUserBoxCourseClick = () => {
   router.push("/user/course");
 }
 

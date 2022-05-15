@@ -20,6 +20,7 @@ const useUserStore = defineStore('user', {
             description: undefined,
             className: undefined,
             school: undefined,
+            avatar: undefined,
 
         }),
         getters: {
