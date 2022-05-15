@@ -97,7 +97,7 @@ fetchClassList();
 
 // 选择列表被点击
 const onSelectListClick = (item: IModelSelectListItem) => {
-  Notification.success(`列表被点击了,当前项数${selectIndex.value},当前分类名:${item.value}`);
+  Notification.success(`列表被点击了,当前项数${item.index},当前分类名:${item.label}`);
 }
 
 

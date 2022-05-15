@@ -11,7 +11,7 @@
       </div>
     </template>
 
-    <div class="course-list-pagination f-jc-c">
+    <div class="course-list-pagination f-jc-c" v-show="!loading">
       <a-pagination :total="pagination.total"
                     @change="changePagination"
                     :page-size="pagination.size"
