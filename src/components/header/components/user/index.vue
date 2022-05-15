@@ -9,7 +9,7 @@
       <template v-else>
         <div class="user-container flex al-c f-row-reverse">
           <span class="right-item">
-            <a-popover trigger="click">
+            <a-popover trigger="click" v-model:popup-visible="userBoxVisible">
               <a-avatar>
                 <img
                     alt="avatar"
@@ -66,7 +66,7 @@
                 <main class="main-nav mt-20">
                   <a-row align="center" :gutter="5">
                     <a-col :span="12">
-                      <a-button long @click="$router.push('/user/course')">
+                      <a-button long @click="handleClickToRouter('/user/course')">
                         <template #icon>
                           <icon-home/>
                         </template>
@@ -239,8 +239,17 @@ const component = defineComponent({
 });
 
 
+
 const userStore = useUserStore();
+const router = useRouter();
 const {userName, sex, role, roleName, nickName, school, className} = storeToRefs(userStore)
+
+
+// 登录后用户box逻辑
+const userBoxVisible = ref(false);
+const onUserBoxCourseClick = ()=>{
+  router.push("/user/course");
+}
 
 
 /**
@@ -403,12 +412,13 @@ const resetLoginForm = () => {
 const handleLogout = () => {
   userStore.resetInfo();
   removeAuthorization();
+  userBoxVisible.value = false;
 }
 
 // 跳转路由
-const router = useRouter();
 const handleClickToRouter = (path: string) => {
   router.push({path});
+  userBoxVisible.value = false;
 }
 
 
