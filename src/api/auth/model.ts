@@ -24,9 +24,19 @@ export interface IModelUserDetailResp {
     sex: number
     school: string
     description: string
+    classId: number
     className: string
     createDate: string
     lastLoginDate: string
+}
+
+export interface IModelUpdateUserDetailRequstDto{
+    userId: number,
+    nickName?: string,
+    sex?: number,
+    classId?: number,
+    school?: string,
+    description?: string
 }
 
 

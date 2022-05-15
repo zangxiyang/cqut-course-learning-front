@@ -16,10 +16,10 @@
           </a-select>
         </a-form-item>
         <a-form-item field="class" label="班级信息">
-          <a-select v-model="detail.className" :loading="loading" placeholder="暂未设置">
-            <a-option value="一班">一班</a-option>
-            <a-option value="二班">二班</a-option>
-          </a-select>
+          <a-select v-model="detail.classId"
+                    :options="classIdOptions"
+                    @focus="fetchClassList"
+                    :loading="loading" placeholder="暂未设置"/>
         </a-form-item>
         <a-form-item field="school" label="学校信息">
           <a-input v-model="detail.school" allow-clear placeholder="暂无"/>
@@ -29,18 +29,25 @@
         </a-form-item>
       </a-form>
       <div class="mt-20 f-jc-c">
-        <a-button type="primary" class="cqut-button large" size="large">保存</a-button>
+        <a-button type="primary" class="cqut-button large"
+                  @click="fetchUpdateUserDetail"
+                  size="large" :loading="updateLoading">保存</a-button>
       </div>
     </div>
   </user-card-right-layout>
 </template>
 
 <script setup lang="ts">
-import {defineComponent, reactive, ref} from "vue";
+import {computed, defineComponent, reactive, ref} from "vue";
 import UserCardRightLayout from "@/layout/UserCardRightLayout.vue";
 import {IModelUserDetailResp} from "@/api/auth/model";
-import {userDetailRequest} from "@/api/auth";
+import {updateUserDetailRequest, userDetailRequest} from "@/api/auth";
 import useUserStore from "@/store/user";
+import {classListRequest} from "@/api/course";
+import {IModelClassResp} from "@/api/course/model";
+import {IModelSelectListItem} from "@/view/Course/component/select-list/model";
+import {Option} from "@arco-design/web-vue/es/select/interface";
+import {Message} from "@arco-design/web-vue";
 
 const component = defineComponent({
   name: 'UserSetting'
@@ -48,7 +55,11 @@ const component = defineComponent({
 
 const userStore = useUserStore();
 const detail = ref<Partial<IModelUserDetailResp>>({
-  sex: 0
+  sex: 0,
+  description: null,
+  nickName: null,
+  school: null,
+
 });
 
 const loading = ref(true);
@@ -57,6 +68,12 @@ const fetchUserDetail = async () => {
   try {
     const {data} = await userDetailRequest(userStore.id)
     detail.value = {...data}
+    if (classIdOptions.value.length === 0){
+      classListData.value.push({
+        className: detail.value.className,
+        id: detail.value.classId
+      })
+    }
   } catch (e) {
     console.log(e)
   } finally {
@@ -67,6 +84,44 @@ const fetchUserDetail = async () => {
 
 fetchUserDetail();
 
+
+// 班级
+const classListData = ref<Partial<IModelClassResp>[]>([]);
+const classIdOptions = computed<Option[]>(() => {
+  return classListData.value.map((value) => {
+    return {
+      label: value.className,
+      value: value.id,
+    };
+  });
+});
+const classLoading = ref<boolean>(false);
+const fetchClassList = async () => {
+  classLoading.value = true;
+  try {
+    const { data } = await classListRequest();
+    classListData.value = data;
+  } catch (err) {
+
+  } finally {
+    classLoading.value = false;
+  }
+};
+
+// 保存用户信息
+const updateLoading = ref(false);
+const fetchUpdateUserDetail = async ()=>{
+  updateLoading.value = true;
+  try {
+    await updateUserDetailRequest({
+      userId: detail.value.id,
+      ...detail.value
+    });
+    Message.success("更新信息成功");
+  } finally {
+    updateLoading.value = false;
+  }
+}
 
 </script>
 
