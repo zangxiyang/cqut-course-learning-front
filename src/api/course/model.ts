@@ -54,3 +54,9 @@ interface IModelNode{
     videoUrl: string
 }
 
+// 加入课程请求体
+export interface IModelSignCourseRequst{
+    courseId: number,
+    studentId: number,
+}
+

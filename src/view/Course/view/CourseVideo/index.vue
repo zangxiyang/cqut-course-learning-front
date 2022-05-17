@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineComponent, provide, ref} from "vue";
+import {defineComponent, PropType, provide, ref} from "vue";
 import CqutVideoPlayer from "@/components/cqut-video-player/index.vue";
 import DefaultLayout from "@/layout/DefaultLayout.vue";
 import {setTitle} from "@/utils/titleUtils";
@@ -64,6 +64,10 @@ provide('visibleCommentProvide',visibleComment);
 provide('visibleAskProvide', visibleAsk);
 
 
+const props = defineProps({
+  id: String as PropType<string>
+});
+
 
 
 // 设置标题
@@ -72,13 +76,8 @@ setTitle("学习视频播放页");
 // 视频
 const route = useRoute();
 const router = useRouter();
-const videoUrl = ref('');
-if (route.query.videoUrl){
-  videoUrl.value = route.query.videoUrl as string;
-} else{
-  Message.error("视频地址为空，3s后返回");
-  setTimeout(()=> router.back(),3000)
-}
+const videoUrl = ref(route.query.videoUrl);
+
 
 </script>
 

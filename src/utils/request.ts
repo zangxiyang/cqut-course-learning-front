@@ -7,7 +7,7 @@
  */
 
 import axios, { AxiosResponse} from "axios";
-import {Notification} from "@arco-design/web-vue";
+import {Message, Notification} from "@arco-design/web-vue";
 import Cookies from 'js-cookie'
 
 

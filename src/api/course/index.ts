@@ -7,7 +7,8 @@
 import {Methods, request} from "@/utils/request";
 import {ApiUrl} from "@/api/ApiUrl";
 import {BasePageRes, BaseParams} from "@/api/model";
-import {IModelClassResp, IModelCourseResp} from "@/api/course/model";
+import {IModelClassResp, IModelCourseResp, IModelSignCourseRequst} from "@/api/course/model";
+import {Message} from "@arco-design/web-vue";
 
 
 export function courseListRequest(params: BaseParams){
@@ -22,3 +23,11 @@ export function courseDetailRequest(id: number){
     return request<IModelCourseResp>(`${ApiUrl.API_COURSE_DETAIL_URL}/${id}`,Methods.GET);
 }
 
+// 加入课程
+export function signCourseRequest(params: IModelSignCourseRequst){
+    return request(`${ApiUrl.API_SIGN_COURSE_URL}`, Methods.POST, params);
+}
+// 查询学生是否加入课程
+export function queryCourseSignRequest(courseId: number, studentId: number){
+    return request<boolean>(`${ApiUrl.API_SIGN_COURSE_URL}/${courseId}`,Methods.GET, {studentId})
+}

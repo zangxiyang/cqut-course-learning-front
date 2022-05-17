@@ -273,7 +273,6 @@ const component = defineComponent({
 const props = defineProps({
   videoId: Number as PropType<number>
 })
-Message.info(`ID: ${props.videoId}`)
 
 const navConfig: IModelCourseNav[] = [
   {

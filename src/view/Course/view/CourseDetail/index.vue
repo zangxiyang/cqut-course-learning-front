@@ -59,7 +59,29 @@
                 </div>
               </div>
               <div class="course-operate">
-                <a-button type="primary">加入课程</a-button>
+                <!-- 判断逻辑 -->
+                <template v-if="querySignCourseLoading">
+                  <a-spin :size="32"/>
+                </template>
+                <template v-else>
+                  <template v-if="courseDetail.authorTeacherId === userId">
+                    <a-button type="primary" disabled class="mr-20">不能加入自己的课程</a-button>
+                  </template>
+                  <template v-if="courseDetail.authorTeacherId !== userId && signCourseStatus && userId != null">
+                    <!-- 未加入课程 -->
+                    <a-button type="primary" class="mr-20"
+                              @click="fetchSignCourse"
+                              :loading="signCourseLoading">加入课程</a-button>
+                  </template>
+                  <template v-if="courseDetail.authorTeacherId !== userId && !signCourseStatus && userId != null">
+                    <!-- 已加入课程 -->
+                    <a-button type="primary" class="mr-20" @click="onStartStudyButtonClick">开始学习</a-button>
+                  </template>
+                  <template v-if="userId == null">
+                    <!-- 未登录 -->
+                    <a-button type="primary" class="mr-20" disabled>未登录</a-button>
+                  </template>
+                </template>
               </div>
             </a-col>
           </a-row>
@@ -126,12 +148,19 @@ import {IModelCourseDetailItem} from "@/view/Course/view/CourseDetail/component/
 import CourseDetailItemList from "@/view/Course/view/CourseDetail/component/course-detail-item-list/index.vue";
 import {setTitle} from "@/utils/titleUtils";
 import CqutNav from "@/components/cqut-nav/index.vue";
-import {courseDetailRequest} from "@/api/course";
+import {courseDetailRequest, queryCourseSignRequest, signCourseRequest} from "@/api/course";
 import {IModelCourseDetailResp} from "@/api/course/model";
+import {storeToRefs} from "pinia";
+import useUserStore from "@/store/user";
 
 const component = defineComponent({
   name: 'CourseDetail'
 });
+
+const userStore = useUserStore();
+const user = storeToRefs(userStore)
+const userId = user.id;
+
 
 const props = defineProps({
   id: String as PropType<string>
@@ -142,9 +171,6 @@ const courseId = Number.parseInt(props.id);
 // 页面数据是否正在加载中状态
 const loading = ref(true);
 
-setTimeout(() => {
-  setTitle('当前课程名')
-}, 1000);
 
 // 请求课程详情数据
 const courseDetail = ref<Partial<IModelCourseDetailResp>>({})
@@ -154,6 +180,7 @@ const fetchCourseDetail = async (id: number = courseId) => {
   try {
     const {data} = await courseDetailRequest(id);
     courseDetail.value = {...data};
+    setTitle(courseDetail.value.name);  // 设置课程标题
     detailList.value = courseDetail.value.chapters.map((item)=>{
       return {
         title: item.chapterName,
@@ -175,8 +202,48 @@ const fetchCourseDetail = async (id: number = courseId) => {
 
   }
 }
+
 fetchCourseDetail();
 
+// 判断是否加入过课程
+const querySignCourseLoading = ref(true);
+const signCourseStatus = ref(false);
+const fetchQuerySignCourse = async ()=>{
+  querySignCourseLoading.value = true;
+  try {
+    const {data} = await queryCourseSignRequest(Number.parseInt(props.id), userId.value);
+    signCourseStatus.value = !data;
+  } finally {
+    querySignCourseLoading.value = false;
+  }
+}
+fetchQuerySignCourse();
+
+// 加入课程
+const signCourseLoading = ref(false);
+const fetchSignCourse = async ()=>{
+  if (userId.value == null){
+    Message.error("请先登录！");
+    return;
+  }
+  signCourseLoading.value = true;
+  try {
+    const {code,data} = await signCourseRequest({courseId: Number.parseInt(props.id), studentId: userId.value});
+    if (code === 200){
+      Message.success("加入课程成功");
+      await fetchQuerySignCourse();
+    }
+  }finally {
+    signCourseLoading.value = false;
+  }
+}
+
+const onStartStudyButtonClick = ()=>{
+  window.scroll({
+    behavior: "smooth",
+    top: document.scrollingElement.scrollTop + document.getElementsByClassName("course-detail-item")[0].getBoundingClientRect().y
+  })
+}
 
 
 
@@ -306,6 +373,11 @@ fetchCourseDetail();
     &:hover {
       background-image: linear-gradient(90deg, #eb3e3e, #cc2828 61%);
     }
+  }
+  .arco-btn-primary.arco-btn-disabled, .arco-btn-primary[type=button].arco-btn-disabled, .arco-btn-primary[type=submit].arco-btn-disabled{
+    background-image: linear-gradient(90deg, #545454, #929292 61%);
+    box-shadow: 0 4px 20px 0 rgba(85, 69, 69, 0.3);
+    border: none;
   }
 }
 

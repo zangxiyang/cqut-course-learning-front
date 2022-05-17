@@ -8,4 +8,5 @@ export default {
     API_COURSE_LIST_URL: '/course-course/course/course',
     API_CLASS_LIST_URL: '/course-auth/class/admin/classOption',
     API_COURSE_DETAIL_URL: `/course-course/course/course/detail`,
+    API_SIGN_COURSE_URL: `/course-course/course/course/sign`,
 }
