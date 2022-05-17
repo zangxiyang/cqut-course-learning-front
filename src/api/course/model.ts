@@ -17,7 +17,7 @@ export interface IModelCourseResp {
     thumb: string,
     status: number,
     detailId: number,
-    publishDate: string
+    publishDate: string,
 }
 
 export interface IModelClassResp {
@@ -42,6 +42,7 @@ export interface IModelCourseDetailResp {
     content: string,
     publishDate: string,
     chapters: IModelChapter[],
+    knowledgeCount: number
 }
 interface IModelChapter {
     chapterName: string,
@@ -61,7 +62,7 @@ export interface IModelSignCourseRequest {
 }
 
 // 课程加入人数返回
-export interface IModelSignCOurseNumberResp{
+export interface IModelSignCourseNumberResp {
     count: number,
     avatars?: string[]
 }

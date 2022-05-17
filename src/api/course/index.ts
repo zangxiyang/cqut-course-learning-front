@@ -8,9 +8,9 @@ import {Methods, request} from "@/utils/request";
 import {ApiUrl} from "@/api/ApiUrl";
 import {BasePageRes, BaseParams} from "@/api/model";
 import {
-    IModelClassResp,
+    IModelClassResp, IModelCourseDetailResp,
     IModelCourseResp,
-    IModelSignCOurseNumberResp,
+    IModelSignCourseNumberResp,
     IModelSignCourseRequest
 } from "@/api/course/model";
 import {Message} from "@arco-design/web-vue";
@@ -25,12 +25,12 @@ export function classListRequest(){
 
 // 查询课程详情
 export function courseDetailRequest(id: number){
-    return request<IModelCourseResp>(`${ApiUrl.API_COURSE_DETAIL_URL}/${id}`,Methods.GET);
+    return request<IModelCourseDetailResp>(`${ApiUrl.API_COURSE_DETAIL_URL}/${id}`,Methods.GET);
 }
 
 // 查询课程加入人数（带avatar）
 export function courseSignNumberRequest(id: number){
-    return request<IModelSignCOurseNumberResp>(`${ApiUrl.API_SIGN_COURSE_NUMBER_URL}/${id}`, Methods.GET);
+    return request<IModelSignCourseNumberResp>(`${ApiUrl.API_SIGN_COURSE_NUMBER_URL}/${id}`, Methods.GET);
 }
 
 // 加入课程

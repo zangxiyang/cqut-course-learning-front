@@ -38,7 +38,9 @@
                   <a-tag>Java开发</a-tag>-->
                 </div>
                 <div class="course-meta">
-                  <span class="knowledge-count">共21个知识点</span>
+                  <span class="knowledge-count">
+                    {{courseDetail.knowledgeCount > 0? `共${courseDetail.knowledgeCount}个知识点`: '暂无知识点'}}
+                  </span>
                   <span class="study-count flex al-c">
                     <a-avatar-group :size="24" :max-count="4" v-if="courseSignNumber.avatars.length > 0">
                       <a-avatar :style="{ backgroundColor: '#7BC616' }" v-for="avatar in courseSignNumber.avatars">
@@ -155,7 +157,7 @@ import CourseDetailItemList from "@/view/Course/view/CourseDetail/component/cour
 import {setTitle} from "@/utils/titleUtils";
 import CqutNav from "@/components/cqut-nav/index.vue";
 import {courseDetailRequest, courseSignNumberRequest, queryCourseSignRequest, signCourseRequest} from "@/api/course";
-import {IModelCourseDetailResp, IModelSignCOurseNumberResp} from "@/api/course/model";
+import {IModelCourseDetailResp, IModelSignCourseNumberResp} from "@/api/course/model";
 import {storeToRefs} from "pinia";
 import useUserStore from "@/store/user";
 
@@ -181,7 +183,7 @@ const loading = ref(true);
 // 请求课程详情数据
 const courseDetail = ref<Partial<IModelCourseDetailResp>>({})
 const detailList = ref<IModelCourseDetailItem[]>([]); // 课程章节数据
-const courseSignNumber = ref<IModelSignCOurseNumberResp>({count: 0});
+const courseSignNumber = ref<IModelSignCourseNumberResp>({count: 0});
 const fetchCourseDetail = async (id: number = courseId) => {
   loading.value = true;
   try {
