@@ -8,12 +8,11 @@ import {Methods, request} from "@/utils/request";
 import {ApiUrl} from "@/api/ApiUrl";
 import {BasePageRes, BaseParams} from "@/api/model";
 import {
-    IModelClassResp, IModelCourseDetailResp,
+    IModelClassResp, IModelCommentCourseResp, IModelCourseDetailResp,
     IModelCourseResp,
     IModelSignCourseNumberResp,
     IModelSignCourseRequest
 } from "@/api/course/model";
-import {Message} from "@arco-design/web-vue";
 
 
 export function courseListRequest(params: BaseParams){
@@ -42,3 +41,7 @@ export function queryCourseSignRequest(courseId: number, studentId: number){
     return request<boolean>(`${ApiUrl.API_SIGN_COURSE_URL}/${courseId}`,Methods.GET, {studentId})
 }
 
+// 查询课程的评论列表
+export function commentCourseRequest(courseId: number, params: BaseParams) {
+    return request<BasePageRes<IModelCommentCourseResp[]>>(`${ApiUrl.API_COMMENT_COURSE_URL}/${courseId}`, Methods.GET, params);
+}

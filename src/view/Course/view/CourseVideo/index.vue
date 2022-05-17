@@ -38,7 +38,7 @@
     </div>
 
     <main class="course-video-bottom">
-      <course-video-bottom :video-id="1"/>
+      <course-video-bottom :course-id="Number.parseInt(id)"/>
     </main>
 
   </default-layout>

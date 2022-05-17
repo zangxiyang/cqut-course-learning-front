@@ -67,4 +67,15 @@ export interface IModelSignCourseNumberResp {
     avatars?: string[]
 }
 
+export interface IModelCommentCourseResp {
+    id: number,
+    content: string,
+    userName: string,
+    nickName: string,
+    avatar: string,
+    parentId?: number,
+    children?: IModelCommentCourseResp[],
+    date: string,
+}
+
 

@@ -21,37 +21,62 @@
           <div class="course-bottom-nav-content">
             <card class="mt-20 mb-20">
               <div class="nav-content-panel">
+                <a-empty v-if="commentData.length === 0"/>
+                <div class="f-jc-c mt-20" v-if="commentLoading">
+                  <a-spin :size="32"/>
+                </div>
                 <a-comment
-                    v-for="item in [1,1,2,12,312,3,123,12,3,123]"
-                    author="用户名"
-                    content="Comment body content.Comment body content.Comment body content."
-                    datetime="2022年05月05日">
+                    v-else
+                    v-for="comment in commentData"
+                    :author="comment.nickName"
+                    :content="comment.content"
+                    :datetime="comment.date">
                   <template #actions>
-                  <span class="action" key="heart" @click="onGoodClick">
-                    <span v-if="good">
-                    <IconHeartFill :style="{ color: '#f53f3f' }"/>
-                    </span>
-                    <span v-else>
-                      <IconHeart/>
-                    </span>
-                      {{ 83 + (good ? 1 : 0) }}
-                  </span>
-                    <span class="action reply" @click="openReplyModal(0)">
+                    <span class="action reply" @click="openReplyModal(0, comment)">
                     <IconMessage/> 回复
                   </span>
                   </template>
                   <template #avatar>
-                    <a-avatar>
+                    <a-avatar v-if="comment.avatar != null">
                       <img
                           alt="avatar"
-                          src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
+                          :src="comment.avatar"
                       />
                     </a-avatar>
+                    <a-avatar v-else>
+                      <icon-user/>
+                    </a-avatar>
                   </template>
+                  <a-comment v-for="child in comment.children"
+                             style="margin-top: 20px"
+                             v-if="comment.children.length > 0"
+                             :author="child.nickName"
+                             :content="child.content"
+                             :datetime="child.date">
+                    <template #actions>
+                      <span class="action reply" @click="openReplyModal(0, child)">
+                        <IconMessage/> 回复
+                      </span>
+                    </template>
+                    <template #avatar>
+                      <a-avatar v-if="child.avatar != null">
+                        <img
+                            alt="avatar"
+                            :src="child.avatar"
+                        />
+                      </a-avatar>
+                      <a-avatar v-else>
+                        <icon-user/>
+                      </a-avatar>
+                    </template>
+                  </a-comment>
                 </a-comment>
 
                 <div class="pagination f-jc-c mt-20">
-                  <a-pagination :total="500" show-total/>
+                  <a-pagination :current="commentPagination.page"
+                                :page-size="commentPagination.size"
+                                v-show="!commentLoading && commentData.length > 0"
+                                :total="commentPagination.total" show-total/>
                 </div>
               </div>
             </card>
@@ -220,20 +245,17 @@
     <cqut-modal v-model="visibleReply">
       <a-comment
           class="reply-comment"
-          author="用户名"
+          :author="replyComment.nickName"
           datetime="2022年05月05日">
         <template #content>
           <h2 v-if="replyForm.type === 1">
             提问标题
           </h2>
-          <p>Comment body content.Comment body content.Comment body content.</p>
+          <p>{{replyComment.content}}</p>
         </template>
         <template #avatar>
           <a-avatar>
-            <img
-                alt="avatar"
-                src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
-            />
+            <icon-user/>
           </a-avatar>
         </template>
       </a-comment>
@@ -260,6 +282,9 @@ import {Message} from "@arco-design/web-vue";
 import CqutModal from "@/components/cqut-modal/index.vue";
 import {ValidatedError} from "@arco-design/web-vue/es/form/interface";
 import Card from "@/components/card/index.vue";
+import {commentCourseRequest} from "@/api/course";
+import {IModelCommentCourseResp} from "@/api/course/model";
+import {BasePageRes, BasePagination, BaseParams} from "@/api/model";
 
 // 依赖注入变量
 const visibleAsk = inject('visibleAskProvide', ref(false));
@@ -271,7 +296,7 @@ const component = defineComponent({
 });
 
 const props = defineProps({
-  videoId: Number as PropType<number>
+  courseId: Number as PropType<number>
 })
 
 const navConfig: IModelCourseNav[] = [
@@ -349,16 +374,48 @@ const onAskFormSubmit = (record: Record<string, ValidatedError>) => {
 
 // 回复
 const replyForm = ref({
-  type: 0 // 0为评论，1为问答
-  , content: ''
+  type: 0, // 0为评论，1为问答
+  content: ''
 });
+const replyComment = ref<Partial<IModelCommentCourseResp>>({})
 const onReplyFromSubmit = (record: Record<string, ValidatedError>) => {
 
 }
-const openReplyModal = (type: number) => {
+const openReplyModal = (type: number, replyItem: IModelCommentCourseResp) => {
   replyForm.value.type = type;
+  console.log(replyItem);
+  replyComment.value = {
+    ...replyItem
+  };
   visibleReply.value = true;
 }
+
+
+// 请求课程评论
+const commentLoading = ref(false);
+const commentData = ref<IModelCommentCourseResp[]>([])
+const commentPagination = ref<BasePagination>({
+  page: 0,
+  size: 10,
+  total: 0
+})
+const fetchCommentCourse = async (params: BaseParams = {page: 1, size: 10}) => {
+  commentLoading.value = true;
+  try {
+    const {data} = await commentCourseRequest(props.courseId, params)
+    commentData.value = data.list;
+    commentPagination.value = {
+      page: data.pageNumber,
+      size: data.pageSize,
+      total: data.total
+    }
+
+  } finally {
+    commentLoading.value = false;
+  }
+}
+fetchCommentCourse();
+
 
 </script>
 
@@ -497,10 +554,15 @@ const openReplyModal = (type: number) => {
   .arco-list-item {
     transition: .2s linear;
     -webkit-transition: .2s linear;
+
     &:hover {
       //background-color: var(--color-neutral-3);
-      background-color: rgba(137,137,137,.1);
+      background-color: rgba(137, 137, 137, .1);
     }
   }
+}
+
+::v-deep(.arco-comment-inner-comment, .arco-comment:not(:first-of-type)){
+  margin-top: 0;
 }
 </style>
