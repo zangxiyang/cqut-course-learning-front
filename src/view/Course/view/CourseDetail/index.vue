@@ -76,8 +76,8 @@
                 <a-row :gutter="10">
                   <a-col :span="6">
                     <a-avatar :size="80">
-                      <img src="https://ai.cqut.edu.cn/__local/9/18/A7/9B594BA707E3232A05502D3E0E0_A106B0C5_A612.jpg"
-                           alt="教师头像"/>
+                      <img :src="courseDetail.avatar" alt="avatar" v-if="courseDetail.avatar"/>
+                      <icon-user v-else/>
                     </a-avatar>
                   </a-col>
                   <a-col :span="18">

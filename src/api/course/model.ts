@@ -33,6 +33,7 @@ export interface IModelCourseDetailResp {
     description: string,
     authorTeacherId: number,
     teacherName: string,
+    avatar: string,
     classId: number,
     className: string,
     thumb: string,

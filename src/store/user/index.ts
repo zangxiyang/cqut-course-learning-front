@@ -37,6 +37,9 @@ const useUserStore = defineStore('user', {
             },
             setUsername(name: string){
                 this.userName =name;
+            },
+            setAvatar(avatar: string){
+                this.avatar = avatar;
             }
         }
     }

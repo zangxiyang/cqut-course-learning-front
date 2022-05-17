@@ -171,11 +171,13 @@ const onUploadSuccess = (fileItem: FileItem) => {
 }
 
 const loading = ref(false);
+const userStore = useUserStore();
 const fetchUserDetail = async () => {
   loading.value = true;
   try {
     const {data} = await userDetailRequest(id.value)
     detail.value = {...data}
+    userStore.setAvatar(detail.value.avatar);
     loading.value = false;
   } catch (e) {
 

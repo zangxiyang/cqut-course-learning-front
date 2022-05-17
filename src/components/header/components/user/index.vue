@@ -10,13 +10,14 @@
         <div class="user-container flex al-c f-row-reverse">
           <span class="right-item">
             <a-popover trigger="hover" v-model:popup-visible="userBoxVisible">
-              <a-avatar>
+              <a-avatar v-if="avatar">
                 <img
-                    v-if="avatar"
                     alt="avatar"
                     :src="avatar"
                 />
-                <icon-user v-else/>
+              </a-avatar>
+              <a-avatar v-else>
+                <icon-user/>
               </a-avatar>
               <template #content>
                 <div class="user-pop-container">
@@ -247,7 +248,7 @@ const component = defineComponent({
 const userStore = useUserStore();
 const router = useRouter();
 const {userName, sex, role, roleName, avatar, nickName, school, className} = storeToRefs(userStore)
-
+console.log(avatar.value)
 
 // 登录后用户box逻辑
 const userBoxVisible = ref(false);
