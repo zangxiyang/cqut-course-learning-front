@@ -86,8 +86,12 @@
                       <a-button type="primary" size="small">他的课程</a-button>
                     </div>
                     <div class="teacher-info">
-                      副教授，硕士生导师。在 《Computerized Medical Imaging and Graphics》、《 Image and Vision Computing 》
-                      、《计算机应用研究》、《光学精密工程》、《计算机科学》及《重庆大学学报(自然科学版)》等国内外重要刊物及国际会议累计发表论文30余篇。
+                      <template v-if="courseDetail.teacherDescription">
+                        {{courseDetail.teacherDescription}}
+                      </template>
+                      <template v-else>
+                        Ta很懒暂时没有自我介绍
+                      </template>
                     </div>
                   </a-col>
                 </a-row>

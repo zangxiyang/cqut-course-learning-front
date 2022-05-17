@@ -34,6 +34,7 @@ export interface IModelCourseDetailResp {
     authorTeacherId: number,
     teacherName: string,
     avatar: string,
+    teacherDescription: string,
     classId: number,
     className: string,
     thumb: string,
