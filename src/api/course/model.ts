@@ -55,8 +55,15 @@ interface IModelNode{
 }
 
 // 加入课程请求体
-export interface IModelSignCourseRequst{
+export interface IModelSignCourseRequest {
     courseId: number,
     studentId: number,
 }
+
+// 课程加入人数返回
+export interface IModelSignCOurseNumberResp{
+    count: number,
+    avatars?: string[]
+}
+
 

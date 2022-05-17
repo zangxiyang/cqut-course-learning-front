@@ -40,14 +40,19 @@
                 <div class="course-meta">
                   <span class="knowledge-count">共21个知识点</span>
                   <span class="study-count flex al-c">
-                    <a-avatar-group :size="24" :max-count="4">
-                      <a-avatar :style="{ backgroundColor: '#7BC616' }">A</a-avatar>
-                      <a-avatar :style="{ backgroundColor: '#14C9C9' }">B</a-avatar>
-                      <a-avatar :style="{ backgroundColor: '#168CFF' }">C</a-avatar>
-                      <a-avatar :style="{ backgroundColor: '#FF7D00' }">Arco</a-avatar>
-                      <a-avatar :style="{ backgroundColor: '#FFC72E' }">Design</a-avatar>
+                    <a-avatar-group :size="24" :max-count="4" v-if="courseSignNumber.avatars.length > 0">
+                      <a-avatar :style="{ backgroundColor: '#7BC616' }" v-for="avatar in courseSignNumber.avatars">
+                        <img :src="avatar" alt="avatar">
+                      </a-avatar>
                     </a-avatar-group>
-                    <span>104个同学正在学习</span>
+                    <span>
+                      <template v-if="courseSignNumber.count > 0">
+                        {{ courseSignNumber.count }}位同学正在学习
+                      </template>
+                      <template v-else>
+                        暂无同学加入
+                      </template>
+                    </span>
                   </span>
                   <span class="date">
                     <icon-clock-circle :size="13"/>
@@ -71,7 +76,8 @@
                     <!-- 未加入课程 -->
                     <a-button type="primary" class="mr-20"
                               @click="fetchSignCourse"
-                              :loading="signCourseLoading">加入课程</a-button>
+                              :loading="signCourseLoading">加入课程
+                    </a-button>
                   </template>
                   <template v-if="courseDetail.authorTeacherId !== userId && !signCourseStatus && userId != null">
                     <!-- 已加入课程 -->
@@ -103,13 +109,13 @@
                     </a-avatar>
                   </a-col>
                   <a-col :span="18">
-                    <h3 class="teacher-name">{{courseDetail.teacherName}}</h3>
+                    <h3 class="teacher-name">{{ courseDetail.teacherName }}</h3>
                     <div class="operate-button">
                       <a-button type="primary" size="small">他的课程</a-button>
                     </div>
                     <div class="teacher-info">
                       <template v-if="courseDetail.teacherDescription">
-                        {{courseDetail.teacherDescription}}
+                        {{ courseDetail.teacherDescription }}
                       </template>
                       <template v-else>
                         Ta很懒暂时没有自我介绍
@@ -148,8 +154,8 @@ import {IModelCourseDetailItem} from "@/view/Course/view/CourseDetail/component/
 import CourseDetailItemList from "@/view/Course/view/CourseDetail/component/course-detail-item-list/index.vue";
 import {setTitle} from "@/utils/titleUtils";
 import CqutNav from "@/components/cqut-nav/index.vue";
-import {courseDetailRequest, queryCourseSignRequest, signCourseRequest} from "@/api/course";
-import {IModelCourseDetailResp} from "@/api/course/model";
+import {courseDetailRequest, courseSignNumberRequest, queryCourseSignRequest, signCourseRequest} from "@/api/course";
+import {IModelCourseDetailResp, IModelSignCOurseNumberResp} from "@/api/course/model";
 import {storeToRefs} from "pinia";
 import useUserStore from "@/store/user";
 
@@ -174,28 +180,30 @@ const loading = ref(true);
 
 // 请求课程详情数据
 const courseDetail = ref<Partial<IModelCourseDetailResp>>({})
-const detailList= ref<IModelCourseDetailItem[]>([]); // 课程章节数据
+const detailList = ref<IModelCourseDetailItem[]>([]); // 课程章节数据
+const courseSignNumber = ref<IModelSignCOurseNumberResp>({count: 0});
 const fetchCourseDetail = async (id: number = courseId) => {
   loading.value = true;
   try {
     const {data} = await courseDetailRequest(id);
     courseDetail.value = {...data};
     setTitle(courseDetail.value.name);  // 设置课程标题
-    detailList.value = courseDetail.value.chapters.map((item)=>{
+    detailList.value = courseDetail.value.chapters.map((item) => {
       return {
         title: item.chapterName,
         desc: item.description,
-        nodes: item.nodes.map((val)=>{
+        nodes: item.nodes.map((val) => {
           return {
             title: val.nodeName,
             type: 'video',
-            // TODO 组件接收url参数
             route: '/course/v/1',
             videoUrl: val.videoUrl
           }
         })
       }
     });
+    // 请求加入人数及avatar
+    await fetchCourseSignNumber();
 
     loading.value = false;
   } catch (e) {
@@ -208,7 +216,7 @@ fetchCourseDetail();
 // 判断是否加入过课程
 const querySignCourseLoading = ref(true);
 const signCourseStatus = ref(false);
-const fetchQuerySignCourse = async ()=>{
+const fetchQuerySignCourse = async () => {
   querySignCourseLoading.value = true;
   try {
     const {data} = await queryCourseSignRequest(Number.parseInt(props.id), userId.value);
@@ -221,31 +229,40 @@ fetchQuerySignCourse();
 
 // 加入课程
 const signCourseLoading = ref(false);
-const fetchSignCourse = async ()=>{
-  if (userId.value == null){
+const fetchSignCourse = async () => {
+  if (userId.value == null) {
     Message.error("请先登录！");
     return;
   }
   signCourseLoading.value = true;
   try {
-    const {code,data} = await signCourseRequest({courseId: Number.parseInt(props.id), studentId: userId.value});
-    if (code === 200){
+    const {code, data} = await signCourseRequest({courseId: Number.parseInt(props.id), studentId: userId.value});
+    if (code === 200) {
       Message.success("加入课程成功");
       await fetchQuerySignCourse();
+      await fetchCourseSignNumber();  // 重新请求加入课程人数
     }
-  }finally {
+  } finally {
     signCourseLoading.value = false;
   }
 }
 
-const onStartStudyButtonClick = ()=>{
+
+// 请求课程加入人数
+const fetchCourseSignNumber = async (id:number = courseId)=>{
+  // 请求加入人数及avatar
+  const {data} = await courseSignNumberRequest(courseId);
+  courseSignNumber.value = {
+    ...data
+  }
+}
+
+const onStartStudyButtonClick = () => {
   window.scroll({
     behavior: "smooth",
     top: document.scrollingElement.scrollTop + document.getElementsByClassName("course-detail-item")[0].getBoundingClientRect().y
   })
 }
-
-
 
 
 </script>
@@ -374,7 +391,8 @@ const onStartStudyButtonClick = ()=>{
       background-image: linear-gradient(90deg, #eb3e3e, #cc2828 61%);
     }
   }
-  .arco-btn-primary.arco-btn-disabled, .arco-btn-primary[type=button].arco-btn-disabled, .arco-btn-primary[type=submit].arco-btn-disabled{
+
+  .arco-btn-primary.arco-btn-disabled, .arco-btn-primary[type=button].arco-btn-disabled, .arco-btn-primary[type=submit].arco-btn-disabled {
     background-image: linear-gradient(90deg, #545454, #929292 61%);
     box-shadow: 0 4px 20px 0 rgba(85, 69, 69, 0.3);
     border: none;
