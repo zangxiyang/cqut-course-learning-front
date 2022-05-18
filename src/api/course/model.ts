@@ -80,10 +80,23 @@ export interface IModelCommentCourseResp {
 }
 
 // 发布课程评论请求
-export interface IModelCommentCourseReqeust {
+export interface IModelCommentCourseRequest {
     courseId: number,
     userId: number,
     content: string,
     parentId?: number
+}
+
+// 课程文件返回体
+export interface IModelCourseFileResp {
+    id: number,
+    courseId: number,
+    cosId: number,
+    fileName: string,
+    fileType: string,
+    userName: string,
+    nickName: string,
+    url: string,
+    createDate: string
 }
 

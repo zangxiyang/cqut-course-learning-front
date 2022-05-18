@@ -139,7 +139,7 @@
 
         <template v-if="navIndex === 2">
           <!-- 资料 -->
-          <card class="mt-20">
+          <card class="mt-20 mb-20">
             <div class="doc-nav">
               <ul class="f-jc-c al-c">
                 <li :class="{'active': item.index === docNavIndex}" @click="onDocNavClick(item.index)"
@@ -150,10 +150,10 @@
 
             <template v-if="docNavIndex === 0">
               <!-- 课程文件 -->
-              <a-list>
-                <a-list-item v-for="item in [1,1,1,1,1,1,1,1,1]">
-                  <a-list-item-meta title="课程文件哦.doc"
-                                    description="第一章节教学资料">
+              <a-list :loading="courseFileLoading">
+                <a-list-item v-for="item in courseFileData">
+                  <a-list-item-meta :title="item.fileName"
+                                    :description="item.fileType">
                     <template #avatar>
                       <a-avatar shape="square">
                         <icon-file/>
@@ -161,12 +161,14 @@
                     </template>
                   </a-list-item-meta>
                   <template #actions>
-                    <a-button type="primary" status="danger" size="mini" shape="round">
-                      <template #icon>
-                        <icon-download/>
-                      </template>
-                      下载
-                    </a-button>
+                    <a :href="item.url" target="_blank">
+                      <a-button type="primary" status="danger" size="mini" shape="round">
+                        <template #icon>
+                          <icon-download/>
+                        </template>
+                        下载
+                      </a-button>
+                    </a>
                   </template>
                 </a-list-item>
               </a-list>
@@ -294,8 +296,8 @@ import {Message} from "@arco-design/web-vue";
 import CqutModal from "@/components/cqut-modal/index.vue";
 import {ValidatedError} from "@arco-design/web-vue/es/form/interface";
 import Card from "@/components/card/index.vue";
-import {commentCourseRequest, publishCommentCourseRequest} from "@/api/course";
-import {IModelCommentCourseReqeust, IModelCommentCourseResp} from "@/api/course/model";
+import {commentCourseRequest, publishCommentCourseRequest, queryCourseFileRequest} from "@/api/course";
+import {IModelCommentCourseRequest, IModelCommentCourseResp, IModelCourseFileResp} from "@/api/course/model";
 import {BasePageRes, BasePagination, BaseParams} from "@/api/model";
 import useUserStore from "@/store/user";
 import {storeToRefs} from "pinia";
@@ -373,7 +375,7 @@ const onAskClick = () => {
 
 // 评论
 
-const commentForm = ref<IModelCommentCourseReqeust>({
+const commentForm = ref<IModelCommentCourseRequest>({
   userId: userStore.id.value,
   courseId: props.courseId,
   content: '',
@@ -397,7 +399,7 @@ const onAskFormSubmit = (record: Record<string, ValidatedError>) => {
 // 回复
 const modalLoading = ref(false);  // 模态框loading动画
 const replyMode = ref(0);         // 0为评论，1为问答
-const replyForm = ref<IModelCommentCourseReqeust>({
+const replyForm = ref<IModelCommentCourseRequest>({
   userId: userStore.id.value,
   courseId: props.courseId,
   content: '',
@@ -491,6 +493,35 @@ const onCommentChange = (page: number)=>{
 
   fetchCommentCourse({page, size: commentPagination.value.size});
 }
+
+// 课程文件
+const courseFilePagination = ref<BasePagination>({
+  page: 1,
+  size: 10,
+  total: 0,
+})
+const courseFileLoading = ref(false);
+const courseFileData = ref<IModelCourseFileResp[]>([]);
+const fetchCourseFile = async (params: BaseParams = {page: 1, size: 10})=>{
+  courseFileLoading.value = true;
+  try {
+    const {code,data} =  await queryCourseFileRequest(params, props.courseId)
+    // 设置分页对象
+    courseFilePagination.value = {
+      page: data.pageNum,
+      size: data.pageSize,
+      total: data.total
+    }
+    // 存入data
+    courseFileData.value = data.list;
+  } finally {
+    courseFileLoading.value = false;
+  }
+}
+const onCourseFilePageChange = (page: number)=>{
+  fetchCourseFile({page, size: courseFilePagination.value.size});
+}
+fetchCourseFile();
 
 
 </script>
