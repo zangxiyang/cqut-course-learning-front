@@ -7,7 +7,7 @@
 // 基本分页返回
 export interface BasePageRes<T>{
     total: number;
-    pageNumber: number;
+    pageNum: number;
     pageSize: number;
     size: number;
     pages: number;

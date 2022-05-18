@@ -21,7 +21,7 @@
           <div class="course-bottom-nav-content">
             <card class="mt-20 mb-20">
               <div class="nav-content-panel">
-                <a-empty v-if="commentData.length === 0"/>
+                <a-empty v-if="commentData.length === 0 && !commentLoading"/>
                 <div class="f-jc-c mt-20" v-if="commentLoading">
                   <a-spin :size="32"/>
                 </div>
@@ -269,7 +269,9 @@
 
       <a-form :model="replyForm" class="mt-20"
               layout="vertical" @submit="onReplyFromSubmit">
-        <a-form-item label="回复内容" field="content">
+        <a-form-item label="回复内容" field="content" :rules="[
+            {required:true ,message:'回复内容为必填信息'}
+            ]">
           <a-textarea v-model="replyForm.content"
                       :auto-size="{minRows: 5, maxRows: 5}"
                       :max-length="200" allow-clear show-word-limit/>
@@ -399,8 +401,26 @@ const replyForm = ref<IModelCommentCourseReqeust>({
   parentId: null,
 });
 const replyComment = ref<Partial<IModelCommentCourseResp>>({})
-const onReplyFromSubmit = (record: Record<string, ValidatedError>) => {
-
+// 回复按钮提交
+const onReplyFromSubmit = async ({values, errors}) => {
+/*  if (!errors){
+    // 验证通过
+    modalLoading.value = true;  // 开启加载中动画
+    try {
+      const {code,data} = await publishCommentCourseRequest({...replyForm.value});
+      if (code === 200){
+        Message.success("回复成功");
+        // 清空数据
+        replyForm.value.content = '';
+        replyForm.value.parentId = null;
+        // 重新加载评论列表
+        await fetchCommentCourse({page: commentPagination.value.page, size: commentPagination.value.size});
+      }
+    }finally {
+      modalLoading.value = false;
+    }
+  }*/
+  console.log(values)
 }
 const openReplyModal = (type: number, replyItem: IModelCommentCourseResp) => {
   replyMode.value = type;
@@ -408,6 +428,8 @@ const openReplyModal = (type: number, replyItem: IModelCommentCourseResp) => {
   replyComment.value = {
     ...replyItem
   };
+  replyForm.value.parentId = replyItem.id;
+
   visibleReply.value = true;
 }
 
@@ -427,7 +449,7 @@ const fetchPublishCommentCourse = async ()=>{
         content: '',
         parentId: null,
       };
-      await fetchCommentCourse(); // 重新加载列表数据
+      await fetchCommentCourse({page: commentPagination.value.page, size: commentPagination.value.size}); // 重新加载列表数据
     }
   } finally {
     modalLoading.value = false;
@@ -449,7 +471,7 @@ const fetchCommentCourse = async (params: BaseParams = {page: 1, size: 10}) => {
     const {data} = await commentCourseRequest(props.courseId, params)
     commentData.value = data.list;
     commentPagination.value = {
-      page: data.pageNumber,
+      page: data.pageNum,
       size: data.pageSize,
       total: data.total
     }
@@ -462,6 +484,7 @@ fetchCommentCourse();
 
 // 分页
 const onCommentChange = (page: number)=>{
+
   fetchCommentCourse({page, size: commentPagination.value.size});
 }
 
