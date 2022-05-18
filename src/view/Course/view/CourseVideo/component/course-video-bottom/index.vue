@@ -276,7 +276,7 @@
                       :auto-size="{minRows: 5, maxRows: 5}"
                       :max-length="200" allow-clear show-word-limit/>
         </a-form-item>
-        <a-button type="primary" status="danger" shape="round" html-type="submit">回复</a-button>
+        <a-button type="primary" status="danger" shape="round" html-type="submit" :loading="modalLoading">回复</a-button>
       </a-form>
     </cqut-modal>
 
@@ -403,11 +403,11 @@ const replyForm = ref<IModelCommentCourseReqeust>({
 const replyComment = ref<Partial<IModelCommentCourseResp>>({})
 // 回复按钮提交
 const onReplyFromSubmit = async ({values, errors}) => {
-/*  if (!errors){
+  if (!errors){
     // 验证通过
     modalLoading.value = true;  // 开启加载中动画
     try {
-      const {code,data} = await publishCommentCourseRequest({...replyForm.value});
+      const {code,data} = await publishCommentCourseRequest({...values});
       if (code === 200){
         Message.success("回复成功");
         // 清空数据
@@ -415,12 +415,13 @@ const onReplyFromSubmit = async ({values, errors}) => {
         replyForm.value.parentId = null;
         // 重新加载评论列表
         await fetchCommentCourse({page: commentPagination.value.page, size: commentPagination.value.size});
+        // 关闭评论模态框
+        visibleReply.value = false;
       }
     }finally {
       modalLoading.value = false;
     }
-  }*/
-  console.log(values)
+  }
 }
 const openReplyModal = (type: number, replyItem: IModelCommentCourseResp) => {
   replyMode.value = type;
