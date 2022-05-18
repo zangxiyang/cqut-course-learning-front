@@ -51,7 +51,6 @@
                              style="margin-top: 20px"
                              v-if="comment.children.length > 0"
                              :author="child.nickName"
-                             :content="child.content"
                              :datetime="child.date">
                     <template #actions>
                       <span class="action reply" @click="openReplyModal(0, child)">
@@ -68,6 +67,10 @@
                       <a-avatar v-else>
                         <icon-user/>
                       </a-avatar>
+                    </template>
+                    <template #content>
+                      <span class="reply-pre mr-5 none-select">回复@{{ child.parentNickName }}:</span>
+                      <span>{{ child.content }}</span>
                     </template>
                   </a-comment>
                 </a-comment>
@@ -637,5 +640,10 @@ const onCommentChange = (page: number)=>{
 
 ::v-deep(.arco-comment-inner-comment, .arco-comment:not(:first-of-type)){
   margin-top: 0;
+}
+
+.reply-pre{
+  letter-spacing: 1px;
+  color: #8a8a8a;
 }
 </style>

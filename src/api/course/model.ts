@@ -74,6 +74,7 @@ export interface IModelCommentCourseResp {
     nickName: string,
     avatar: string,
     parentId?: number,
+    parentNickName?: string,
     children?: IModelCommentCourseResp[],
     date: string,
 }
