@@ -8,7 +8,7 @@ import {Methods, request} from "@/utils/request";
 import {ApiUrl} from "@/api/ApiUrl";
 import {BasePageRes, BaseParams} from "@/api/model";
 import {
-    IModelClassResp, IModelCommentCourseResp, IModelCourseDetailResp,
+    IModelClassResp, IModelCommentCourseReqeust, IModelCommentCourseResp, IModelCourseDetailResp,
     IModelCourseResp,
     IModelSignCourseNumberResp,
     IModelSignCourseRequest
@@ -44,4 +44,9 @@ export function queryCourseSignRequest(courseId: number, studentId: number){
 // 查询课程的评论列表
 export function commentCourseRequest(courseId: number, params: BaseParams) {
     return request<BasePageRes<IModelCommentCourseResp[]>>(`${ApiUrl.API_COMMENT_COURSE_URL}/${courseId}`, Methods.GET, params);
+}
+
+// 发布评论
+export function publishCommentCourseRequest(dto: IModelCommentCourseReqeust){
+    return request(`${ApiUrl.API_COMMENT_COURSE_URL}`, Methods.POST, dto);
 }

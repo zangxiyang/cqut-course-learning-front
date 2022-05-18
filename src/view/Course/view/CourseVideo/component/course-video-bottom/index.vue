@@ -74,6 +74,7 @@
 
                 <div class="pagination f-jc-c mt-20">
                   <a-pagination :current="commentPagination.page"
+                                @change="onCommentChange"
                                 :page-size="commentPagination.size"
                                 v-show="!commentLoading && commentData.length > 0"
                                 :total="commentPagination.total" show-total/>
@@ -238,7 +239,10 @@
                       :auto-size="{minRows: 5, maxRows: 5}"
                       :max-length="200" allow-clear show-word-limit/>
         </a-form-item>
-        <a-button type="primary" status="danger" shape="round" html-type="submit">评论</a-button>
+        <a-button type="primary" status="danger"
+                  :loading="modalLoading"
+                  @click="onPublishCommentButtonClick"
+                  shape="round" html-type="submit">评论</a-button>
       </a-form>
     </cqut-modal>
 
@@ -246,16 +250,19 @@
       <a-comment
           class="reply-comment"
           :author="replyComment.nickName"
-          datetime="2022年05月05日">
+          :datetime="replyComment.date">
         <template #content>
-          <h2 v-if="replyForm.type === 1">
+          <h2 v-if="replyMode === 1">
             提问标题
           </h2>
           <p>{{replyComment.content}}</p>
         </template>
         <template #avatar>
-          <a-avatar>
+          <a-avatar v-if="replyComment.avatar == null">
             <icon-user/>
+          </a-avatar>
+          <a-avatar v-else>
+            <img :src="replyComment.avatar" alt="avatar">
           </a-avatar>
         </template>
       </a-comment>
@@ -282,9 +289,12 @@ import {Message} from "@arco-design/web-vue";
 import CqutModal from "@/components/cqut-modal/index.vue";
 import {ValidatedError} from "@arco-design/web-vue/es/form/interface";
 import Card from "@/components/card/index.vue";
-import {commentCourseRequest} from "@/api/course";
-import {IModelCommentCourseResp} from "@/api/course/model";
+import {commentCourseRequest, publishCommentCourseRequest} from "@/api/course";
+import {IModelCommentCourseReqeust, IModelCommentCourseResp} from "@/api/course/model";
 import {BasePageRes, BasePagination, BaseParams} from "@/api/model";
+import useUserStore from "@/store/user";
+import {storeToRefs} from "pinia";
+import user from "@/store/user";
 
 // 依赖注入变量
 const visibleAsk = inject('visibleAskProvide', ref(false));
@@ -294,6 +304,7 @@ const visibleReply = ref(false);
 const component = defineComponent({
   name: 'CourseVideoBottom'
 });
+const userStore = storeToRefs(useUserStore());
 
 const props = defineProps({
   courseId: Number as PropType<number>
@@ -357,9 +368,15 @@ const onAskClick = () => {
 
 // 评论
 
-const commentForm = ref({
-  content: ''
+const commentForm = ref<IModelCommentCourseReqeust>({
+  userId: userStore.id.value,
+  courseId: props.courseId,
+  content: '',
 })
+
+const onPublishCommentButtonClick = ()=>{
+  fetchPublishCommentCourse();
+}
 
 
 // 问答
@@ -373,21 +390,48 @@ const onAskFormSubmit = (record: Record<string, ValidatedError>) => {
 
 
 // 回复
-const replyForm = ref({
-  type: 0, // 0为评论，1为问答
-  content: ''
+const modalLoading = ref(false);  // 模态框loading动画
+const replyMode = ref(0);         // 0为评论，1为问答
+const replyForm = ref<IModelCommentCourseReqeust>({
+  userId: userStore.id.value,
+  courseId: props.courseId,
+  content: '',
+  parentId: null,
 });
 const replyComment = ref<Partial<IModelCommentCourseResp>>({})
 const onReplyFromSubmit = (record: Record<string, ValidatedError>) => {
 
 }
 const openReplyModal = (type: number, replyItem: IModelCommentCourseResp) => {
-  replyForm.value.type = type;
+  replyMode.value = type;
   console.log(replyItem);
   replyComment.value = {
     ...replyItem
   };
   visibleReply.value = true;
+}
+
+// 发布评论
+const fetchPublishCommentCourse = async ()=>{
+  modalLoading.value = true;
+  try {
+    const {code,data} = await publishCommentCourseRequest(commentForm.value);
+    if (code === 200){
+      Message.success("发表评论成功");
+      // 关闭评论模态框
+      visibleComment.value = false;
+      // 清空评论数据
+      commentForm.value = {
+        userId: userStore.id.value,
+        courseId: props.courseId,
+        content: '',
+        parentId: null,
+      };
+      await fetchCommentCourse(); // 重新加载列表数据
+    }
+  } finally {
+    modalLoading.value = false;
+  }
 }
 
 
@@ -415,6 +459,11 @@ const fetchCommentCourse = async (params: BaseParams = {page: 1, size: 10}) => {
   }
 }
 fetchCommentCourse();
+
+// 分页
+const onCommentChange = (page: number)=>{
+  fetchCommentCourse({page, size: commentPagination.value.size});
+}
 
 
 </script>

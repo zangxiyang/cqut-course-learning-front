@@ -78,4 +78,11 @@ export interface IModelCommentCourseResp {
     date: string,
 }
 
+// 发布课程评论请求
+export interface IModelCommentCourseReqeust {
+    courseId: number,
+    userId: number,
+    content: string,
+    parentId?: number
+}
 
