@@ -12,4 +12,5 @@ export default {
     API_SIGN_COURSE_NUMBER_URL: `/course-course/course/course/signNumber`,
     API_COMMENT_COURSE_URL: `/course-message/comment/comment`,
     API_COURSE_FILE_URL: `/course-course/course/courseFile`,
+    API_KNOWLEDGE_FILE_URL: '/course-course/course/knowFile',
 }

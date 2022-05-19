@@ -173,16 +173,26 @@
                 </a-list-item>
               </a-list>
               <div class="pagination f-jc-c mt-20">
-                <a-pagination :total="500" show-total/>
+                <a-pagination :total="courseFilePagination.total"
+                              :current="courseFilePagination.page"
+                              @change="onCourseFilePageChange"
+                              :page-size="courseFilePagination.size" show-total/>
               </div>
             </template>
 
             <template v-if="docNavIndex === 1">
               <!-- 知识点文件 -->
-              <a-list>
-                <a-list-item>
-                  <a-list-item-meta title="知识点文件.doc"
-                                    description="第一章节教学资料">
+              <a-list :loading="knowledgeFileLoading">
+                <a-list-item v-for="item in knowledgeFileData">
+                  <a-list-item-meta :title="item.fileName">
+                    <template #description>
+                      <div class="description-container flex al-c mt-10">
+                        <a-tag color="red">知识点名: {{ item.knowledgeName }}</a-tag>
+                        <a-tag color="purple" class="ml-15" >
+                          {{ item.knowledgeDescription === null? '暂无描述': item.knowledgeDescription}}
+                        </a-tag>
+                      </div>
+                    </template>
                     <template #avatar>
                       <a-avatar shape="square">
                         <icon-file/>
@@ -190,17 +200,23 @@
                     </template>
                   </a-list-item-meta>
                   <template #actions>
-                    <a-button type="primary" status="danger" size="mini" shape="round">
-                      <template #icon>
-                        <icon-download/>
-                      </template>
-                      下载
-                    </a-button>
+                    <a :href="item.url" target="_blank">
+                      <a-button type="primary" status="danger" size="mini" shape="round">
+                        <template #icon>
+                          <icon-download/>
+                        </template>
+                        下载
+                      </a-button>
+                    </a>
                   </template>
                 </a-list-item>
               </a-list>
               <div class="pagination f-jc-c mt-20">
-                <a-pagination :total="500" show-total/>
+                <a-pagination :total="knowledgePagination.total"
+                              :page-size="knowledgePagination.size"
+                              :current="knowledgePagination.page"
+                              @change="onKnowledgeFilePageChange"
+                              show-total/>
               </div>
             </template>
           </card>
@@ -296,8 +312,18 @@ import {Message} from "@arco-design/web-vue";
 import CqutModal from "@/components/cqut-modal/index.vue";
 import {ValidatedError} from "@arco-design/web-vue/es/form/interface";
 import Card from "@/components/card/index.vue";
-import {commentCourseRequest, publishCommentCourseRequest, queryCourseFileRequest} from "@/api/course";
-import {IModelCommentCourseRequest, IModelCommentCourseResp, IModelCourseFileResp} from "@/api/course/model";
+import {
+  commentCourseRequest,
+  publishCommentCourseRequest,
+  queryCourseFileRequest,
+  queryKnowledgeFileRequest
+} from "@/api/course";
+import {
+  IModelCommentCourseRequest,
+  IModelCommentCourseResp,
+  IModelCourseFileResp,
+  IModelKnowldgeFileResp
+} from "@/api/course/model";
 import {BasePageRes, BasePagination, BaseParams} from "@/api/model";
 import useUserStore from "@/store/user";
 import {storeToRefs} from "pinia";
@@ -324,7 +350,8 @@ const navConfig: IModelCourseNav[] = [
   },
   {
     name: '问答',
-    index: 1
+    index: 1,
+    disabled: true
   },
   {
     name: '资料',
@@ -522,6 +549,35 @@ const onCourseFilePageChange = (page: number)=>{
   fetchCourseFile({page, size: courseFilePagination.value.size});
 }
 fetchCourseFile();
+
+// 知识点文件
+const knowledgeFileLoading = ref(false);
+const knowledgeFileData = ref<IModelKnowldgeFileResp[]>([]);
+const knowledgePagination = ref<BasePagination>({
+  page: 1,
+  size: 10,
+  total: 0,
+});
+const fetchKnowledgeFile = async (params: BaseParams = {page: 1, size: 10})=>{
+  knowledgeFileLoading.value = true;
+  try {
+    const {code,data} =  await queryKnowledgeFileRequest(params, props.courseId)
+    // 设置分页对象
+    knowledgePagination.value = {
+      page: data.pageNum,
+      size: data.pageSize,
+      total: data.total
+    }
+    // 存入data
+    knowledgeFileData.value = data.list;
+  } finally {
+    knowledgeFileLoading.value = false;
+  }
+}
+const onKnowledgeFilePageChange = (page: number)=>{
+  fetchKnowledgeFile({page, size: knowledgePagination.value.size});
+}
+fetchKnowledgeFile();
 
 
 </script>

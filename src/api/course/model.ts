@@ -100,3 +100,17 @@ export interface IModelCourseFileResp {
     createDate: string
 }
 
+// 知识点文件返回体
+export interface IModelKnowldgeFileResp {
+    id: number,
+    courseId: number,
+    cosId: number,
+    fileName: string,
+    fileType: string,
+    userName: string,
+    knowledgeName: string;           // 知识点名
+    knowledgeDescription: string;    // 知识点描述
+    url: string,
+    createDate: string
+}
+
