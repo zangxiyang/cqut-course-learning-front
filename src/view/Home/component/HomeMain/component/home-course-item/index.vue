@@ -10,8 +10,8 @@
     <div class="meta f-jc-sb al-c">
       <div class="teacher flex al-c">
         <span>{{item.teacher}}老师</span>
-        <span class="dot ml-5 mr-5">·</span>
-        <div class="sign-count">
+        <span class="dot ml-5 mr-5" v-if="item.signCount">·</span>
+        <div class="sign-count" v-if="item.signCount">
           {{item.signCount}}人报名
         </div>
       </div>

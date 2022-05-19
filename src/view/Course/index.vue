@@ -97,7 +97,12 @@ fetchClassList();
 
 // 选择列表被点击
 const onSelectListClick = (item: IModelSelectListItem) => {
-  Notification.success(`列表被点击了,当前项数${item.index},当前分类名:${item.label}`);
+  if (item.value === -1){
+    // 全部
+    fetchCourseList();
+  } else{
+    fetchCourseList(item.value as number);
+  }
 }
 
 
@@ -110,13 +115,13 @@ const pagination = ref<BasePagination>({
   size: 8,
   total: 0
 });
-const fetchCourseList = async ()=>{
+const fetchCourseList = async (classId?: number)=>{
   courseLoading.value = true;
   try {
-    const {code,data} = await courseListRequest({page: pagination.value.page, size: pagination.value.size});
+    const {code,data} = await courseListRequest({page: pagination.value.page, size: pagination.value.size}, classId);
     courseList.value = data.list;
     pagination.value = {
-      page: data.pageNumber,
+      page: data.pageNum,
       size: data.pageSize,
       total: data.total
     }
@@ -134,7 +139,6 @@ const homeCourseList:Ref<IModelHomeCourse[]> = computed<IModelHomeCourse[]>(()=>
     return {
       id: val.id,
       name: val.name,
-      signCount: 99,
       tag: [val.className],
       thumb: val.thumb,
       date: val.publishDate,

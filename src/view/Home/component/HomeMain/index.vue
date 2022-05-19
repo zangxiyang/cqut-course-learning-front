@@ -90,7 +90,6 @@ const homeCourseList: Ref<IModelHomeCourse[]> = computed<IModelHomeCourse[]>(() 
     return {
       id: val.id,
       name: val.name,
-      signCount: 99,
       tag: [val.className],
       thumb: val.thumb,
       date: val.publishDate,

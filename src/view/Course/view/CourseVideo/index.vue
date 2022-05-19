@@ -76,7 +76,7 @@ setTitle("学习视频播放页");
 // 视频
 const route = useRoute();
 const router = useRouter();
-const videoUrl = ref(route.query.videoUrl);
+const videoUrl = ref(route.query.videoUrl as string);
 
 
 </script>

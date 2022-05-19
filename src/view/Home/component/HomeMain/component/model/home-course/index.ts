@@ -8,7 +8,7 @@ export interface IModelHomeCourse {
     id?: number
     thumb?: string
     name?: string
-    signCount: number
+    signCount?: number
     date?: string
     teacher?: string
     tag?: string[]
