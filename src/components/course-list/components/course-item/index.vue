@@ -1,7 +1,7 @@
 <template>
-  <div class="course-item-container" v-if="courseInfo.id !== -1">
+  <div class="course-item-container" v-if="courseInfo.id !== -1" @click="onItemClick">
     <header class="thumb"
-            :style="{backgroundImage: courseInfo.thumb === undefined ?`url(${courseInfo.thumb})`: `url(${defaultImg})`}">
+            :style="{backgroundImage: courseInfo.thumb != null ?`url(${courseInfo.thumb})`: `url(${defaultImg})`}">
     </header>
     <div class="item-info mt-5 mb-5">
       <a href="JavaScript:">
@@ -28,6 +28,7 @@ import {IModelCourse} from "@/components/course-list/model";
 import defaultImg from '@/assets/img/d5be2168ffbe2de1e3eb76fa3f46faaa898a8b63.jpg'
 import {Icon} from "@arco-design/web-vue";
 import {baseConfig} from "@/config";
+import {useRouter} from "vue-router";
 
 const component = defineComponent({
   name: 'CourseItem'
@@ -39,6 +40,11 @@ const props = defineProps<{
 
 const IconFont = Icon.addFromIconFontCn({src:baseConfig.iconfont});
 
+const router = useRouter();
+
+const onItemClick = ()=>{
+  router.push(`/course/${props.courseInfo.id}`);
+}
 
 
 

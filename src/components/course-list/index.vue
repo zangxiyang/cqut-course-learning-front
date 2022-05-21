@@ -1,28 +1,43 @@
 <template>
   <div class='course-list'>
-    <course-item :course-info="item" v-for="item in list" :key="item.id"/>
+    <a-grid :col-gap="10" :row-gap="10" :cols="4">
+      <a-grid-item :span="1" v-for="item in list" :key="item.id">
+        <course-item :course-info="item"/>
+      </a-grid-item>
+    </a-grid>
   </div>
   <div class="course-pagination f-jc-c al-c mt-20">
-    <a-pagination :total="200" show-total/>
+    <a-pagination :total="pagination.total"
+                  :size="pagination.size"
+                  :current="pagination.page"
+                  @change="onPageChange"
+                  show-total/>
   </div>
 </template>
 
 <script setup lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, defineEmits} from "vue";
 import {IModelCourse} from "@/components/course-list/model";
 import CourseItem from "@/components/course-list/components/course-item/index.vue";
+import {BasePagination} from "@/api/model";
 
 const component = defineComponent({
   name: 'CourseList'
 });
 
 const props = defineProps<{
-  list?: IModelCourse[]
+  list?: IModelCourse[],
+  pagination?: BasePagination
 }>()
 
-if (props.list.length > 4 && props.list.length %4 !== 0){
-  for (let i = 0 ; i < props.list.length %4; i++) props.list.push({id: -1});
+const emits = defineEmits<{
+  (e: 'change', page: number): void,
+}>();
+
+const onPageChange = (page: number)=>{
+  emits('change', page);
 }
+
 
 
 </script>

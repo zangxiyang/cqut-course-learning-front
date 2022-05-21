@@ -15,8 +15,8 @@ import {
 } from "@/api/course/model";
 
 
-export function courseListRequest(params: BaseParams, classId?: number) {
-    return request<BasePageRes<IModelCourseResp[]>>(`${ApiUrl.API_COURSE_LIST_URL}?status=1`, Methods.GET, {...params,classId})
+export function courseListRequest(params: BaseParams, classId?: number, userId?: number) {
+    return request<BasePageRes<IModelCourseResp[]>>(`${ApiUrl.API_COURSE_LIST_URL}?status=1`, Methods.GET, {...params,classId, userId})
 }
 
 export function classListRequest() {
