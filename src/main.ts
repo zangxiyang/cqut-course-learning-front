@@ -7,12 +7,14 @@ import '@/assets/scss/index.scss'
 // 额外引入图标库
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import pinia from "@/store";
+import directive from "@/directive";
 
 
-createApp(App)
+const app = createApp(App)
     .use(router)
     .use(ArcoVue)
     .use(ArcoVueIcon)
     .use(pinia)
+    .use(directive)
     .mount('#app')
 

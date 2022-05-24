@@ -101,7 +101,7 @@ export interface IModelCourseFileResp {
 }
 
 // 知识点文件返回体
-export interface IModelKnowldgeFileResp {
+export interface IModelKnowledgeFileResp {
     id: number,
     courseId: number,
     cosId: number,
@@ -112,5 +112,23 @@ export interface IModelKnowldgeFileResp {
     knowledgeDescription: string;    // 知识点描述
     url: string,
     createDate: string
+}
+
+
+// 通知请求体
+export interface IModelNoticeRequest{
+    courseId: number,
+    title: string,
+    content: string,
+    status?: number
+}
+// 通知返回体
+export interface IModelNoticeResp{
+    id: number,
+    courseId: number,
+    title: string,
+    content: string,
+    date: string,
+    status: number
 }
 

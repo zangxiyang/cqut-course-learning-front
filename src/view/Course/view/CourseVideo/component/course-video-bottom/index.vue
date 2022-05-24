@@ -3,10 +3,14 @@
     <div class="course-bottom-nav">
       <div class="maxer-container w-1280">
         <ul class="flex al-c">
-          <li :class="{'active': item.index === navIndex, 'disabled': item.disabled === true}"
-              v-for="item in navConfig" :key="item.index" @click="onNavClick(item.index,item.disabled)">
-            {{ item.name }}
-          </li>
+          <template v-for="item in navConfig" :key="item.index">
+
+            <li :class="{'active': item.index === navIndex,'disabled': item.disabled === true}"
+                v-if="checkPermission(item.role)"
+                @click="onNavClick(item.index,item.disabled)">
+              {{ item.name }}
+            </li>
+          </template>
         </ul>
       </div>
     </div>
@@ -188,8 +192,8 @@
                     <template #description>
                       <div class="description-container flex al-c mt-10">
                         <a-tag color="red">知识点名: {{ item.knowledgeName }}</a-tag>
-                        <a-tag color="purple" class="ml-15" >
-                          {{ item.knowledgeDescription === null? '暂无描述': item.knowledgeDescription}}
+                        <a-tag color="purple" class="ml-15">
+                          {{ item.knowledgeDescription === null ? '暂无描述' : item.knowledgeDescription }}
                         </a-tag>
                       </div>
                     </template>
@@ -220,6 +224,9 @@
               </div>
             </template>
           </card>
+        </template>
+        <template v-if="navIndex === 3">
+          <course-notice :id="courseId"/>
         </template>
       </div>
     </div>
@@ -263,7 +270,8 @@
         <a-button type="primary" status="danger"
                   :loading="modalLoading"
                   @click="onPublishCommentButtonClick"
-                  shape="round" html-type="submit">评论</a-button>
+                  shape="round" html-type="submit">评论
+        </a-button>
       </a-form>
     </cqut-modal>
 
@@ -276,7 +284,7 @@
           <h2 v-if="replyMode === 1">
             提问标题
           </h2>
-          <p>{{replyComment.content}}</p>
+          <p>{{ replyComment.content }}</p>
         </template>
         <template #avatar>
           <a-avatar v-if="replyComment.avatar == null">
@@ -306,7 +314,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineComponent, inject, onMounted, PropType, Ref, ref} from "vue";
+import {computed, defineComponent, inject, onMounted, PropType, Ref, ref, watch, watchEffect} from "vue";
 import {IModelCourseNav} from "@/view/Course/view/CourseVideo/component/course-video-bottom/model";
 import {Message} from "@arco-design/web-vue";
 import CqutModal from "@/components/cqut-modal/index.vue";
@@ -322,12 +330,14 @@ import {
   IModelCommentCourseRequest,
   IModelCommentCourseResp,
   IModelCourseFileResp,
-  IModelKnowldgeFileResp
+  IModelKnowledgeFileResp
 } from "@/api/course/model";
 import {BasePageRes, BasePagination, BaseParams} from "@/api/model";
 import useUserStore from "@/store/user";
 import {storeToRefs} from "pinia";
 import user from "@/store/user";
+import {RoleType} from "@/store/user/types";
+import CourseNotice from "@/view/Course/view/CourseVideo/component/course-notice.vue";
 
 // 依赖注入变量
 const visibleAsk = inject('visibleAskProvide', ref(false));
@@ -338,6 +348,7 @@ const component = defineComponent({
   name: 'CourseVideoBottom'
 });
 const userStore = storeToRefs(useUserStore());
+const role = computed(()=> userStore.role.value);
 
 const props = defineProps({
   courseId: Number as PropType<number>
@@ -356,9 +367,27 @@ const navConfig: IModelCourseNav[] = [
   {
     name: '资料',
     index: 2
+  },
+  {
+    name: '通知',
+    index: 3,
+    role: ['teacher', 'student', 'admin']
   }
 ]
 const navIndex = ref(0);
+
+// 检查是否具备权限
+const checkPermission = (permission: RoleType[] | string[]): boolean =>{
+  if (permission == undefined) {
+    return true;
+  }
+  return permission.includes(role.value);
+}
+
+// 监听权限状态
+watch(role, (value, oldValue)=>{
+  navIndex.value = 0;
+})
 
 const onNavClick = (index: number, isDisabled: boolean = false): void => {
   if (isDisabled === true) {
@@ -408,7 +437,7 @@ const commentForm = ref<IModelCommentCourseRequest>({
   content: '',
 })
 
-const onPublishCommentButtonClick = ()=>{
+const onPublishCommentButtonClick = () => {
   fetchPublishCommentCourse();
 }
 
@@ -435,12 +464,12 @@ const replyForm = ref<IModelCommentCourseRequest>({
 const replyComment = ref<Partial<IModelCommentCourseResp>>({})
 // 回复按钮提交
 const onReplyFromSubmit = async ({values, errors}) => {
-  if (!errors){
+  if (!errors) {
     // 验证通过
     modalLoading.value = true;  // 开启加载中动画
     try {
-      const {code,data} = await publishCommentCourseRequest({...values});
-      if (code === 200){
+      const {code, data} = await publishCommentCourseRequest({...values});
+      if (code === 200) {
         Message.success("回复成功");
         // 清空数据
         replyForm.value.content = '';
@@ -450,7 +479,7 @@ const onReplyFromSubmit = async ({values, errors}) => {
         // 关闭评论模态框
         visibleReply.value = false;
       }
-    }finally {
+    } finally {
       modalLoading.value = false;
     }
   }
@@ -467,11 +496,11 @@ const openReplyModal = (type: number, replyItem: IModelCommentCourseResp) => {
 }
 
 // 发布评论
-const fetchPublishCommentCourse = async ()=>{
+const fetchPublishCommentCourse = async () => {
   modalLoading.value = true;
   try {
-    const {code,data} = await publishCommentCourseRequest(commentForm.value);
-    if (code === 200){
+    const {code, data} = await publishCommentCourseRequest(commentForm.value);
+    if (code === 200) {
       Message.success("发表评论成功");
       // 关闭评论模态框
       visibleComment.value = false;
@@ -516,7 +545,7 @@ const fetchCommentCourse = async (params: BaseParams = {page: 1, size: 10}) => {
 fetchCommentCourse();
 
 // 分页
-const onCommentChange = (page: number)=>{
+const onCommentChange = (page: number) => {
 
   fetchCommentCourse({page, size: commentPagination.value.size});
 }
@@ -529,10 +558,10 @@ const courseFilePagination = ref<BasePagination>({
 })
 const courseFileLoading = ref(false);
 const courseFileData = ref<IModelCourseFileResp[]>([]);
-const fetchCourseFile = async (params: BaseParams = {page: 1, size: 10})=>{
+const fetchCourseFile = async (params: BaseParams = {page: 1, size: 10}) => {
   courseFileLoading.value = true;
   try {
-    const {code,data} =  await queryCourseFileRequest(params, props.courseId)
+    const {code, data} = await queryCourseFileRequest(params, props.courseId)
     // 设置分页对象
     courseFilePagination.value = {
       page: data.pageNum,
@@ -545,23 +574,23 @@ const fetchCourseFile = async (params: BaseParams = {page: 1, size: 10})=>{
     courseFileLoading.value = false;
   }
 }
-const onCourseFilePageChange = (page: number)=>{
+const onCourseFilePageChange = (page: number) => {
   fetchCourseFile({page, size: courseFilePagination.value.size});
 }
 fetchCourseFile();
 
 // 知识点文件
 const knowledgeFileLoading = ref(false);
-const knowledgeFileData = ref<IModelKnowldgeFileResp[]>([]);
+const knowledgeFileData = ref<IModelKnowledgeFileResp[]>([]);
 const knowledgePagination = ref<BasePagination>({
   page: 1,
   size: 10,
   total: 0,
 });
-const fetchKnowledgeFile = async (params: BaseParams = {page: 1, size: 10})=>{
+const fetchKnowledgeFile = async (params: BaseParams = {page: 1, size: 10}) => {
   knowledgeFileLoading.value = true;
   try {
-    const {code,data} =  await queryKnowledgeFileRequest(params, props.courseId)
+    const {code, data} = await queryKnowledgeFileRequest(params, props.courseId)
     // 设置分页对象
     knowledgePagination.value = {
       page: data.pageNum,
@@ -574,7 +603,7 @@ const fetchKnowledgeFile = async (params: BaseParams = {page: 1, size: 10})=>{
     knowledgeFileLoading.value = false;
   }
 }
-const onKnowledgeFilePageChange = (page: number)=>{
+const onKnowledgeFilePageChange = (page: number) => {
   fetchKnowledgeFile({page, size: knowledgePagination.value.size});
 }
 fetchKnowledgeFile();
@@ -725,11 +754,11 @@ fetchKnowledgeFile();
   }
 }
 
-::v-deep(.arco-comment-inner-comment, .arco-comment:not(:first-of-type)){
+::v-deep(.arco-comment-inner-comment, .arco-comment:not(:first-of-type)) {
   margin-top: 0;
 }
 
-.reply-pre{
+.reply-pre {
   letter-spacing: 1px;
   color: #8a8a8a;
 }

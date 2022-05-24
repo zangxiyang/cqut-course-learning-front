@@ -9,7 +9,7 @@ import {ApiUrl} from "@/api/ApiUrl";
 import {BasePageRes, BaseParams} from "@/api/model";
 import {
     IModelClassResp, IModelCommentCourseRequest, IModelCommentCourseResp, IModelCourseDetailResp, IModelCourseFileResp,
-    IModelCourseResp, IModelKnowldgeFileResp,
+    IModelCourseResp, IModelKnowledgeFileResp, IModelNoticeRequest, IModelNoticeResp,
     IModelSignCourseNumberResp,
     IModelSignCourseRequest
 } from "@/api/course/model";
@@ -60,8 +60,19 @@ export function queryCourseFileRequest(params: BaseParams, courseId: number) {
 
 // 获取知识点文件列表
 export function queryKnowledgeFileRequest(params: BaseParams, courseId: number) {
-    return request<BasePageRes<IModelKnowldgeFileResp[]>>(ApiUrl.API_KNOWLEDGE_FILE_URL, Methods.GET, {
+    return request<BasePageRes<IModelKnowledgeFileResp[]>>(ApiUrl.API_KNOWLEDGE_FILE_URL, Methods.GET, {
         ...params,
         courseId
     })
 }
+
+// 查询课程通知
+export function queryCourseNoticeRequest(params: BaseParams ,courseId: number){
+    return request<BasePageRes<IModelNoticeResp[]>>(ApiUrl.API_NOTICE_URL, Methods.GET, {...params ,courseId});
+}
+
+// 发表课程通知
+export function courseNoticeRequest(params: IModelNoticeRequest){
+    return request<string>(ApiUrl.API_NOTICE_URL, Methods.POST,{...params});
+}
+
