@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import {defineComponent} from "vue";
 
-const component = defineComponent({
+defineComponent({
   name: 'Card'
 });
 </script>

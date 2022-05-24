@@ -14,24 +14,30 @@
   </a-modal>
 </template>
 
+
 <script setup lang="ts">
 import {defineComponent, PropType} from "vue";
-
-const component = defineComponent({
-  name: 'CqutModal'
-});
 
 const props = defineProps({
   modelValue: Boolean as PropType<boolean>
 });
+defineComponent({
+  name: 'CqutModal'
+})
 
 
 const emits = defineEmits<{
   (e: 'update:modelValue', visible: boolean)
 }>()
-
-
 </script>
+
+<!--<script lang="ts">
+import {defineComponent} from "vue";
+
+export default defineComponent({
+  name: 'CqutModal'
+})
+</script>-->
 
 <style lang="scss" scoped>
 .modal-close{

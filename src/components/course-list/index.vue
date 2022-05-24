@@ -21,7 +21,7 @@ import {IModelCourse} from "@/components/course-list/model";
 import CourseItem from "@/components/course-list/components/course-item/index.vue";
 import {BasePagination} from "@/api/model";
 
-const component = defineComponent({
+defineComponent({
   name: 'CourseList'
 });
 

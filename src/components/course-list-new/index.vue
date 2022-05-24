@@ -27,7 +27,7 @@ import CourseListItem from "@/components/course-list-new/component/course-list-i
 import {IModelCourseItem} from "@/components/course-list-new/component/model";
 import {BasePagination} from "@/api/model";
 
-const component = defineComponent({
+defineComponent({
   name: 'CourseListNew'
 });
 
