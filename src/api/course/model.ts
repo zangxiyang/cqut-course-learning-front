@@ -132,3 +132,20 @@ export interface IModelNoticeResp{
     status: number
 }
 
+// 作业请求体
+export interface IModelHomeworkRequest {
+    courseId: number,
+    title: string,
+    content: string,
+    fileUrl?: string
+}
+export interface IModelHomeworkResp {
+    id: number;
+    courseId: number;
+    title: string;
+    content: string;
+    date: string;
+    endDate: string;
+    fileUrl: string;
+}
+

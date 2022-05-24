@@ -8,8 +8,17 @@ import {Methods, request} from "@/utils/request";
 import {ApiUrl} from "@/api/ApiUrl";
 import {BasePageRes, BaseParams} from "@/api/model";
 import {
-    IModelClassResp, IModelCommentCourseRequest, IModelCommentCourseResp, IModelCourseDetailResp, IModelCourseFileResp,
-    IModelCourseResp, IModelKnowledgeFileResp, IModelNoticeRequest, IModelNoticeResp,
+    IModelClassResp,
+    IModelCommentCourseRequest,
+    IModelCommentCourseResp,
+    IModelCourseDetailResp,
+    IModelCourseFileResp,
+    IModelCourseResp,
+    IModelHomeworkRequest,
+    IModelHomeworkResp,
+    IModelKnowledgeFileResp,
+    IModelNoticeRequest,
+    IModelNoticeResp,
     IModelSignCourseNumberResp,
     IModelSignCourseRequest
 } from "@/api/course/model";
@@ -81,3 +90,17 @@ export function delCourseNoticeRequest(id: number){
     return request(`${ApiUrl.API_NOTICE_URL}/${id}`, Methods.DELETE);
 }
 
+
+// 查询课程作业
+export function queryCourseHomeworkRequest(params: BaseParams, courseId: number){
+    return request<BasePageRes<IModelHomeworkResp[]>>(ApiUrl.API_HOMEWORK_URL, Methods.GET, {...params, courseId});
+}
+// 发布课程作业
+export function courseHomeworkRequest(params: IModelHomeworkRequest){
+    return request(ApiUrl.API_HOMEWORK_URL, Methods.POST,params);
+}
+// 删除课程作业
+export function delCourseHomeworkRequest(id: number){
+    return request(`${ApiUrl.API_HOMEWORK_URL}/${id}`, Methods.DELETE);
+
+}

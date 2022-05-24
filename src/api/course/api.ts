@@ -14,4 +14,5 @@ export default {
     API_COURSE_FILE_URL: `/course-course/course/courseFile`,
     API_KNOWLEDGE_FILE_URL: '/course-course/course/knowFile',
     API_NOTICE_URL: '/course-message/notice',
+    API_HOMEWORK_URL: '/course-course/course/homework'
 }

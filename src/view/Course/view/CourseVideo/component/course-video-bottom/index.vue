@@ -228,6 +228,9 @@
         <template v-if="navIndex === 3">
           <course-notice :id="courseId" />
         </template>
+        <template v-if="navIndex === 4">
+          <course-work :id="courseId"/>
+        </template>
       </div>
     </div>
 
@@ -338,6 +341,7 @@ import {storeToRefs} from "pinia";
 import user from "@/store/user";
 import {RoleType} from "@/store/user/types";
 import CourseNotice from "@/view/Course/view/CourseVideo/component/course-notice.vue";
+import CourseWork from "@/view/Course/view/CourseVideo/component/course-work.vue";
 
 // 依赖注入变量
 const visibleAsk = inject('visibleAskProvide', ref(false));
@@ -371,6 +375,11 @@ const navConfig: IModelCourseNav[] = [
   {
     name: '通知',
     index: 3,
+    role: ['teacher', 'student', 'admin']
+  },
+  {
+    name: '作业',
+    index: 4,
     role: ['teacher', 'student', 'admin']
   }
 ]
