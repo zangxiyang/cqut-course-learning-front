@@ -123,7 +123,6 @@ const checkPermission = (): boolean=>{
   else if (role.value === 'teacher'){
     // 如果是教师则判断是否为当前课程的所属教师
     const teacherId = Number(route.query.teacherId);
-    console.log(teacherId)
     if (id?.value === teacherId){
       // 当前id和课程所属id一致的话
       return true;
