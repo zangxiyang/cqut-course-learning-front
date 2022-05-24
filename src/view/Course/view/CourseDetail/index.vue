@@ -199,7 +199,8 @@ const fetchCourseDetail = async (id: number = courseId) => {
             title: val.nodeName,
             type: 'video',
             route: `/course/v/${id}`,
-            videoUrl: val.videoUrl
+            videoUrl: val.videoUrl,
+            teacherId: courseDetail.value.authorTeacherId
           }
         })
       }

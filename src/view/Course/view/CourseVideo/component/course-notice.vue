@@ -3,7 +3,7 @@
     <div class="empty"></div>
     <a-button type="primary" status="danger" shape="round" size="large"
               @click="visible = true"
-              v-permission="['admin','teacher']">发布通知
+              v-permission="checkPermission">发布通知
     </a-button>
   </header>
   <a-card class="mt-20 mb-20">
@@ -24,7 +24,7 @@
           <span class="notice-date">
             发布于&nbsp;{{ item.date }}
           </span>
-          <div class="action f-jc-r mt-10">
+          <div class="action f-jc-r mt-10" v-permission="checkPermission">
             <a-popconfirm content="再次确认是否删除?" type="warning"
                           :ok-button-props="{status: 'warning'}"
                           :ok-loading="popLoading"
@@ -59,8 +59,7 @@
       </a-form-item>
       <a-button type="primary" status="danger" shape="round" class="mt-10"
                 :loading="modalLoading"
-                html-type="submit">发布通知
-      </a-button>
+                html-type="submit">发布通知</a-button>
     </a-form>
   </cqut-modal>
 
@@ -75,10 +74,16 @@ import {courseNoticeRequest, delCourseNoticeRequest, queryCourseNoticeRequest} f
 import {IModelNoticeResp} from "@/api/course/model";
 import CqutModal from "@/components/cqut-modal/index.vue";
 import {Message} from "@arco-design/web-vue";
+import useUserStore from "@/store/user";
+import {storeToRefs} from "pinia";
+import {useRoute} from "vue-router";
 
 const props = defineProps<{
   id: number
 }>();
+const userStore = useUserStore();
+const {role,id} = storeToRefs(userStore);
+
 
 const pagination = ref<BasePagination>({
   page: 1,
@@ -108,6 +113,24 @@ const changePage = (page: number) => {
   fetchNoticeList({page, size: pagination.value.size});
 }
 
+const route = useRoute();
+
+// 判断是否对该课程有管理权限
+const checkPermission = (): boolean=>{
+  if (role.value === 'admin'){
+    return true;
+  }
+  else if (role.value === 'teacher'){
+    // 如果是教师则判断是否为当前课程的所属教师
+    const teacherId = Number(route.query.teacherId);
+    console.log(teacherId)
+    if (id?.value === teacherId){
+      // 当前id和课程所属id一致的话
+      return true;
+    }
+  }
+  return false;
+}
 
 // 发布通知模态框
 const visible = ref(false);

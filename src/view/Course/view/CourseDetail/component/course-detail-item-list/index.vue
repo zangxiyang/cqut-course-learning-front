@@ -7,7 +7,7 @@
     </div>
     <ul class="nodes">
       <li v-for="node in item.nodes" :key="node.title">
-        <router-link :to="{path: `${node.route}`, query: {videoUrl: node.videoUrl}}" v-if="node.route != null" class="flex al-c">
+        <router-link :to="{path: `${node.route}`, query: {videoUrl: node.videoUrl, teacherId: node.teacherId}}" v-if="node.route != null" class="flex al-c">
           <template v-if="node.type === 'file'">
             <!--文件类型-->
             <icon-drive-file/>

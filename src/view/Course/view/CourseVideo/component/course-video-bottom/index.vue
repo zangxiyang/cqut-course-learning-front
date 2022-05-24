@@ -226,7 +226,7 @@
           </card>
         </template>
         <template v-if="navIndex === 3">
-          <course-notice :id="courseId"/>
+          <course-notice :id="courseId" />
         </template>
       </div>
     </div>

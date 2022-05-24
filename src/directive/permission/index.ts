@@ -16,7 +16,15 @@ function checkPermission(el: HTMLElement, binding: DirectiveBinding) {
         el.parentNode.removeChild(el);
       }
     }
-  } else {
+  } else if (typeof(value) == 'function'){
+    // 如果当前为回调函数
+    const hasPermission = value();
+    if (!hasPermission && el.parentNode) {
+      el.parentNode.removeChild(el);
+    }
+  }
+
+  else {
     throw new Error(`need roles! Like v-permission="['admin','user']"`);
   }
 }
