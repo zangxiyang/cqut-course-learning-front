@@ -76,3 +76,8 @@ export function courseNoticeRequest(params: IModelNoticeRequest){
     return request<string>(ApiUrl.API_NOTICE_URL, Methods.POST,{...params});
 }
 
+// 删除课程通知
+export function delCourseNoticeRequest(id: number){
+    return request(`${ApiUrl.API_NOTICE_URL}/${id}`, Methods.DELETE);
+}
+

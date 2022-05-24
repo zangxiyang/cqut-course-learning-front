@@ -63,11 +63,13 @@ const detail = ref<Partial<IModelUserDetailResp>>({
 });
 
 const loading = ref(true);
+const user = useUserStore();
 const fetchUserDetail = async () => {
   loading.value = true;
   try {
     const {data} = await userDetailRequest(userStore.id)
     detail.value = {...data}
+    user.setInfo({...data});
     if (classIdOptions.value.length === 0){
       classListData.value.push({
         className: detail.value.className,
