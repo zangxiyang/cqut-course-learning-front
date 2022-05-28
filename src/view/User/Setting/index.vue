@@ -59,7 +59,6 @@ const detail = ref<Partial<IModelUserDetailResp>>({
   description: null,
   nickName: null,
   school: null,
-
 });
 
 const loading = ref(true);
@@ -120,6 +119,7 @@ const fetchUpdateUserDetail = async ()=>{
       ...detail.value
     });
     Message.success("更新信息成功");
+    await fetchUserDetail();
   } finally {
     updateLoading.value = false;
   }
