@@ -30,7 +30,7 @@
       </a-form>
       <div class="mt-20 f-jc-c">
         <a-button type="primary" class="cqut-button large"
-                  @click="fetchUpdateUserDetail"
+                  @click="fetchUpdateUserDetail()"
                   size="large" :loading="updateLoading">保存</a-button>
       </div>
     </div>
@@ -46,8 +46,8 @@ import useUserStore from "@/store/user";
 import {classListRequest} from "@/api/course";
 import {IModelClassResp} from "@/api/course/model";
 import {IModelSelectListItem} from "@/view/Course/component/select-list/model";
-import {Option} from "@arco-design/web-vue/es/select/interface";
 import {Message} from "@arco-design/web-vue";
+import {Option} from "@arco-design/web-vue";
 
 const component = defineComponent({
   name: 'UserSetting'
@@ -88,7 +88,7 @@ fetchUserDetail();
 
 // 班级
 const classListData = ref<Partial<IModelClassResp>[]>([]);
-const classIdOptions = computed<Option[]>(() => {
+const classIdOptions = computed(() => {
   return classListData.value.map((value) => {
     return {
       label: value.className,
